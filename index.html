@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Advanced Digital Clock Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <header>
+            <h1>⏰ Advanced Digital Clock</h1>
+        </header>
+
+        <div class="dashboard">
+            <!-- CARD JAM UTAMA (diperbesar + label zona) -->
+            <div class="card" id="clock-card">
+                <h2>Jam Digital</h2>
+                <div class="clock-display">
+                    <div class="clock-timezone" id="clock-timezone-label">WIB · Indonesia</div>
+                    <span id="clock-time" class="clock-time">--:--:--</span>
+                    <span id="clock-date" class="clock-date">---</span>
+                </div>
+                <div class="clock-controls">
+                    <select id="timezone-select" aria-label="Zona Waktu">
+                        <option value="Asia/Jakarta">WIB (UTC+7)</option>
+                        <option value="Asia/Makassar">WITA (UTC+8)</option>
+                        <option value="Asia/Jayapura">WIT (UTC+9)</option>
+                        <option value="UTC">UTC</option>
+                        <option value="Asia/Tokyo">Tokyo (JST)</option>
+                        <option value="America/New_York">New York (EST)</option>
+                    </select>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="toggle-12h"> 12 jam
+                    </label>
+                    <label class="color-label">
+                        Warna Jam: <input type="color" id="clock-color" value="#00ffaa">
+                    </label>
+                </div>
+            </div>
+
+            <!-- CARD ALARM -->
+            <div class="card" id="alarm-card">
+                <h2>🔔 Alarm</h2>
+                <div class="alarm-input-group">
+                    <input type="number" id="alarm-hour" min="0" max="23" placeholder="Jam" value="7">
+                    <span>:</span>
+                    <input type="number" id="alarm-minute" min="0" max="59" placeholder="Menit" value="0">
+                </div>
+                <div class="alarm-actions">
+                    <button id="alarm-set" class="btn">Set</button>
+                    <button id="alarm-toggle" class="btn" disabled>Aktif</button>
+                    <button id="alarm-stop" class="btn" disabled>Stop</button>
+                </div>
+                <div id="alarm-status" class="status-text"></div>
+                <div id="alarm-notification" class="notification hidden">🔔 ALARM BERBUNYI! 🔔</div>
+            </div>
+
+            <!-- CARD STOPWATCH -->
+            <div class="card" id="stopwatch-card">
+                <h2>⏱️ Stopwatch</h2>
+                <div class="stopwatch-display" id="stopwatch-display">00:00:00.00</div>
+                <div class="stopwatch-actions">
+                    <button id="stopwatch-start" class="btn">Start</button>
+                    <button id="stopwatch-pause" class="btn">Pause</button>
+                    <button id="stopwatch-reset" class="btn">Reset</button>
+                </div>
+            </div>
+
+            <!-- CARD COUNTDOWN -->
+            <div class="card" id="countdown-card">
+                <h2>⏳ Countdown</h2>
+                <div class="countdown-input-group">
+                    <input type="number" id="countdown-hour" min="0" value="0"> <span>:</span>
+                    <input type="number" id="countdown-minute" min="0" max="59" value="0"> <span>:</span>
+                    <input type="number" id="countdown-second" min="0" max="59" value="0">
+                </div>
+                <div class="countdown-display" id="countdown-display">00:00:00</div>
+                <div class="countdown-actions">
+                    <button id="countdown-start" class="btn">Start</button>
+                    <button id="countdown-reset" class="btn">Reset</button>
+                </div>
+                <div id="countdown-notification" class="notification hidden">⏰ WAKTU HABIS!</div>
+            </div>
+
+            <!-- CARD PENGATURAN -->
+            <div class="card" id="settings-card">
+                <h2>⚙️ Pengaturan</h2>
+                <div class="settings-group">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="darkmode-toggle" checked> Dark Mode
+                    </label>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="audio-tick-toggle"> Suara Tick
+                    </label>
+                    <button id="fullscreen-btn" class="btn">⛶ Fullscreen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
