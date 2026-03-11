@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>🎣 Crypto Fishing Tycoon</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- SPLASH -->
+  <div id="splash-screen" class="screen active">
+    <div class="splash-bg">
+      <div class="bubble" style="--d:2.1s;--l:8%"></div>
+      <div class="bubble" style="--d:3.2s;--l:22%"></div>
+      <div class="bubble" style="--d:1.8s;--l:40%"></div>
+      <div class="bubble" style="--d:2.7s;--l:60%"></div>
+      <div class="bubble" style="--d:3.5s;--l:78%"></div>
+      <div class="bubble" style="--d:2.3s;--l:92%"></div>
+    </div>
+    <div class="splash-content">
+      <div class="splash-icon">🎣</div>
+      <h1 class="game-title">Crypto Fishing<br/><span>Tycoon</span></h1>
+      <p class="splash-sub">Fish It Gileg Edition</p>
+      <div class="splash-features">
+        <span>🎣 Mancing Seru</span>
+        <span>🐉 6 Rarity Tier</span>
+        <span>💰 Trade &amp; Collect</span>
+      </div>
+      <button class="btn-play" id="btn-start">▶ MULAI MAIN</button>
+    </div>
+    <div class="wave-bottom"></div>
+  </div>
+
+  <!-- MAIN GAME -->
+  <div id="game-wrapper" class="hidden">
+
+    <!-- HUD -->
+    <div class="hud-bar">
+      <div class="hud-player">
+        <span class="hud-avatar">🎣</span>
+        <div class="hud-info">
+          <span class="hud-name" id="hud-name">Angler</span>
+          <div class="hud-xp-row">
+            <div class="hud-xp-bar"><div class="hud-xp-fill" id="hud-xp-fill"></div></div>
+            <span class="hud-xp-num" id="hud-xp-label">0xp</span>
+          </div>
+        </div>
+        <span class="hud-level" id="hud-level">Lv.1</span>
+      </div>
+      <div class="hud-currency">
+        <span class="coin-badge">💰&nbsp;<span id="hud-coins">0</span></span>
+        <span class="gem-badge">💎&nbsp;<span id="hud-gems">0</span></span>
+      </div>
+    </div>
+
+    <!-- NAV TABS -->
+    <nav class="nav-tabs">
+      <button class="nav-btn active" data-tab="fishing">🎣<span>Fishing</span></button>
+      <button class="nav-btn" data-tab="aquarium">🐠<span>Aquarium</span></button>
+      <button class="nav-btn" data-tab="market">💱<span>Market</span></button>
+      <button class="nav-btn" data-tab="missions">🎯<span>Misi</span></button>
+      <button class="nav-btn" data-tab="pets">🐾<span>Pet</span></button>
+      <button class="nav-btn" data-tab="map">🗺️<span>Map</span></button>
+      <button class="nav-btn" data-tab="settings">⚙️<span>Setting</span></button>
+    </nav>
+
+    <!-- ===== TAB: FISHING ===== -->
+    <div id="tab-fishing" class="tab-content active">
+      <div class="fishing-layout">
+
+        <!-- SCENE COLUMN -->
+        <div class="scene-col">
+          <div class="fishing-scene">
+
+            <!-- SKY -->
+            <div class="sky-area">
+              <div class="clouds">
+                <span class="cloud c1">☁️</span>
+                <span class="cloud c2">☁️</span>
+                <span class="cloud c3">⛅</span>
+              </div>
+              <!-- Visual rod -->
+              <div class="rod-visual-wrap">
+                <div class="rod-body" id="rod-body"></div>
+                <div class="rod-line-visual" id="rod-line-visual"></div>
+              </div>
+            </div>
+
+            <!-- WATER -->
+            <div class="water-zone">
+              <div class="water-surface">
+                <div class="wave-row">
+                  <div class="wave-strip w1"></div>
+                  <div class="wave-strip w2"></div>
+                </div>
+
+                <!-- BOBBER -->
+                <div class="bobber-container" id="bobber-container">
+                  <div class="bobber-obj" id="bobber-obj">
+                    <div class="bob-top"></div>
+                    <div class="bob-mid"></div>
+                    <div class="bob-bot"></div>
+                  </div>
+                  <!-- Ripples when bite -->
+                  <div class="bite-ring ring1" id="ring1"></div>
+                  <div class="bite-ring ring2" id="ring2"></div>
+                </div>
+
+                <!-- BITE ALERT OVERLAY -->
+                <div class="bite-alert-box" id="bite-alert-box">
+                  <span>❗❗</span>
+                  <span class="bite-alert-text">IKAN MENGGIGIT!</span>
+                </div>
+              </div>
+
+              <!-- UNDERWATER -->
+              <div class="underwater">
+                <div class="fish-swim fs1">🐟</div>
+                <div class="fish-swim fs2">🐠</div>
+                <div class="fish-swim fs3">🐡</div>
+                <span class="seaweed sw1">🌿</span>
+                <span class="seaweed sw2">🌿</span>
+                <span class="seaweed sw3">🌿</span>
+                <div class="uw-bubbles">
+                  <span class="uwb"></span><span class="uwb"></span>
+                  <span class="uwb"></span><span class="uwb"></span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Rod/Map info -->
+          <div class="rod-info-strip">
+            <span id="cur-rod-icon">🎣</span>
+            <span id="cur-rod-name">Basic Rod</span>
+            <span class="divider">|</span>
+            <span class="map-chip" id="map-chip">🌊 River Market</span>
+          </div>
+        </div>
+
+        <!-- CONTROLS COLUMN -->
+        <div class="controls-col">
+
+          <!-- STATE: IDLE -->
+          <div id="st-idle" class="fstate active">
+            <p class="state-hint">Tekan tombol untuk melempar kail ke air!</p>
+            <button class="btn-cast" id="btn-cast">
+              <span class="bci">🎣</span>
+              <span class="bcl">LEMPAR KAIL</span>
+              <span class="bcs">Pancing sekarang!</span>
+            </button>
+          </div>
+
+          <!-- STATE: WAITING -->
+          <div id="st-waiting" class="fstate hidden">
+            <div class="wait-visual">
+              <div class="wait-ring-wrap">
+                <svg class="wait-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                  <circle class="wait-track" cx="40" cy="40" r="34"/>
+                  <circle class="wait-arc" cx="40" cy="40" r="34" id="wait-arc"/>
+                </svg>
+                <div class="wait-center">🎣</div>
+              </div>
+              <p class="wait-text">Menunggu gigitan...</p>
+              <div class="wait-dots"><span>.</span><span>.</span><span>.</span></div>
+            </div>
+            <button class="btn-cancel" id="btn-cancel">✖ Batalkan</button>
+          </div>
+
+          <!-- STATE: BITE -->
+          <div id="st-bite" class="fstate hidden">
+            <div class="bite-state-content">
+              <div class="bite-emoji-anim">❗</div>
+              <p class="bite-big-text">IKAN MENGGIGIT!</p>
+              <p class="bite-sub-text">Tekan TARIK sebelum waktu habis!</p>
+              <!-- countdown bar -->
+              <div class="bite-countdown-wrap">
+                <div class="bite-countdown-bar" id="bite-countdown-bar"></div>
+              </div>
+              <button class="btn-pull" id="btn-pull">
+                <span class="bci">💪</span>
+                <span class="bcl">TARIK!</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- STATE: MISS -->
+          <div id="st-miss" class="fstate hidden">
+            <div class="miss-wrap">
+              <div class="miss-emoji">😫</div>
+              <p class="miss-title">Ikan kabur!</p>
+              <p class="miss-desc">Kamu terlambat menarik. Jangan sampai kejadian lagi!</p>
+              <button class="btn-cast-again" id="btn-miss-retry">🎣 Coba Lagi</button>
+            </div>
+          </div>
+
+          <!-- STATE: PULLING -->
+          <div id="st-pulling" class="fstate hidden">
+            <div class="pulling-wrap">
+              <div class="pulling-fish-icon" id="pull-fish-icon">🐟</div>
+              <p class="pulling-title">Menarik ikan...</p>
+              <div class="pull-bar-wrap">
+                <div class="pull-bar-track">
+                  <div class="pull-bar-fill" id="pull-bar-fill"></div>
+                </div>
+                <span class="pull-pct" id="pull-pct">0%</span>
+              </div>
+              <p class="pull-tip">Tekan berulang untuk menarik lebih cepat!</p>
+              <button class="btn-reel" id="btn-reel">🎣 Gulung Senar!</button>
+            </div>
+          </div>
+
+          <!-- STATE: RESULT -->
+          <div id="st-result" class="fstate hidden">
+            <div class="result-card" id="result-card">
+              <div class="result-sparkles" id="result-sparkles"></div>
+              <div class="result-fish-icon" id="result-fish-icon">🐟</div>
+              <div class="result-tags">
+                <span class="res-rarity" id="res-rarity">COMMON</span>
+                <span class="res-size" id="res-size">Kecil</span>
+              </div>
+              <div class="result-fish-name" id="result-fish-name">Dogecoin</div>
+              <div class="result-gains">
+                <span class="res-coins" id="res-coins">+50 💰</span>
+                <span class="res-xp" id="res-xp">+10 XP</span>
+              </div>
+              <div class="res-bonus-text" id="res-bonus-text"></div>
+              <button class="btn-cast-again" id="btn-continue">🎣 Mancing Lagi!</button>
+            </div>
+          </div>
+
+          <!-- QUICK STATS -->
+          <div class="qs-row">
+            <div class="qs-item">🎣<br><b id="stat-catches">0</b><small>Tangkap</small></div>
+            <div class="qs-item">⭐<br><b id="stat-xp">0</b><small>XP</small></div>
+            <div class="qs-item">🐋<br><b id="stat-legendary">0</b><small>Legend</small></div>
+            <div class="qs-item">🐉<br><b id="stat-mythic">0</b><small>Mythic</small></div>
+          </div>
+
+          <!-- UPGRADES -->
+          <div class="upg-row">
+            <button class="upg-btn" id="btn-upgrade-rod">
+              ⬆️ Upgrade Rod<br><small><span id="rod-cost">500</span> 💰</small>
+            </button>
+            <button class="upg-btn" id="btn-upgrade-bait">
+              ⬆️ Upgrade Bait<br><small><span id="bait-cost">200</span> 💰</small>
+            </button>
+          </div>
+
+        </div><!-- /controls-col -->
+      </div><!-- /fishing-layout -->
+    </div>
+
+    <!-- ===== TAB: AQUARIUM ===== -->
+    <div id="tab-aquarium" class="tab-content hidden">
+      <div class="section-header">
+        <h2>🐠 Aquarium Koleksi</h2>
+        <span class="count-badge" id="aq-count">0 ikan</span>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">Semua</button>
+        <button class="filter-btn" data-filter="Common">🟢 Common</button>
+        <button class="filter-btn" data-filter="Uncommon">🔵 Uncommon</button>
+        <button class="filter-btn" data-filter="Rare">🟣 Rare</button>
+        <button class="filter-btn" data-filter="Epic">🟡 Epic</button>
+        <button class="filter-btn" data-filter="Legendary">🔴 Legendary</button>
+        <button class="filter-btn" data-filter="Mythic">🌈 Mythic</button>
+      </div>
+      <div class="aquarium-grid" id="aquarium-grid">
+        <div class="empty-state"><span>🎣</span><p>Belum ada ikan! Ayo mancing dulu!</p></div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: MARKET ===== -->
+    <div id="tab-market" class="tab-content hidden">
+      <div class="section-header">
+        <h2>💱 Trading Market</h2>
+        <span class="balance-badge">💰&nbsp;<span id="market-coins">0</span></span>
+      </div>
+      <div class="market-tabs">
+        <button class="market-tab-btn active" data-mtab="sell">📤 Jual Ikan</button>
+        <button class="market-tab-btn" data-mtab="buy">📥 Beli NPC</button>
+      </div>
+      <div id="mtab-sell" class="market-panel active">
+        <p class="market-hint">Pilih ikan dari inventori untuk dijual:</p>
+        <div class="market-grid" id="market-sell-grid">
+          <div class="empty-state"><span>🐟</span><p>Inventori kosong</p></div>
+        </div>
+      </div>
+      <div id="mtab-buy" class="market-panel hidden">
+        <p class="market-hint">Beli ikan dari NPC Pasar:</p>
+        <div class="market-grid" id="market-buy-grid"></div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: MISSIONS ===== -->
+    <div id="tab-missions" class="tab-content hidden">
+      <div class="section-header">
+        <h2>🎯 Mission Board</h2>
+        <span class="count-badge" id="mission-progress">0 siap klaim</span>
+      </div>
+      <div class="missions-list" id="missions-list"></div>
+    </div>
+
+    <!-- ===== TAB: PETS ===== -->
+    <div id="tab-pets" class="tab-content hidden">
+      <div class="section-header">
+        <h2>🐾 Pet Collection</h2>
+        <span class="count-badge" id="pet-active-name">Tidak ada pet aktif</span>
+      </div>
+      <div class="pets-grid" id="pets-grid"></div>
+    </div>
+
+    <!-- ===== TAB: MAP ===== -->
+    <div id="tab-map" class="tab-content hidden">
+      <div class="section-header">
+        <h2>🗺️ Pilih Lokasi</h2>
+        <span class="count-badge" id="current-map-badge">River Market</span>
+      </div>
+      <div class="map-grid" id="map-grid"></div>
+    </div>
+
+    <!-- ===== TAB: SETTINGS ===== -->
+    <div id="tab-settings" class="tab-content hidden">
+      <div class="section-header"><h2>⚙️ Pengaturan</h2></div>
+      <div class="settings-list">
+        <div class="setting-row">
+          <span>🔊 Efek Suara</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-sfx" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <span>🎵 Musik</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-music" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-row">
+          <span>🏷️ Nama Pemain</span>
+          <input type="text" id="player-name-input" class="name-input" placeholder="Nama kamu..." maxlength="16" />
+        </div>
+        <div class="setting-row">
+          <span>📊 Statistik</span>
+          <div class="stats-display" id="stats-display"></div>
+        </div>
+        <div class="setting-row danger">
+          <span>🗑️ Reset Progress</span>
+          <button class="btn-danger" id="btn-reset">Reset Game</button>
+        </div>
+      </div>
+      <div class="credits-box">
+        <p>🎣 <b>Crypto Fishing Tycoon</b></p>
+        <p>Fish It Gileg Edition · v2.0</p>
+      </div>
+    </div>
+
+  </div><!-- /game-wrapper -->
+
+  <!-- TOAST -->
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <!-- LEVEL UP MODAL -->
+  <div id="levelup-modal" class="modal-overlay hidden">
+    <div class="modal-box levelup-box">
+      <div class="levelup-star">⭐</div>
+      <h2>LEVEL UP!</h2>
+      <p id="levelup-text">Selamat! Kamu Level 2!</p>
+      <p class="levelup-bonus" id="levelup-bonus"></p>
+      <button class="btn-cast-again" id="btn-levelup-close">🎉 Lanjut!</button>
+    </div>
+  </div>
+
+  <!-- CONFIRM RESET -->
+  <div id="confirm-modal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-danger-icon">⚠️</div>
+      <h2>Reset Progress?</h2>
+      <p>Semua data akan dihapus permanen!</p>
+      <div class="modal-btns">
+        <button class="btn-danger" id="btn-confirm-yes">Ya, Reset!</button>
+        <button class="btn-secondary" id="btn-confirm-no">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
