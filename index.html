@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>🎂 Chat Ucapan Ulang Tahun | Keluarga Tercinta</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts & Font Awesome untuk ikon -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="phone-frame"> <!-- Bungkus agar lebih mirip chat HP -->
+        <div class="chat-container">
+            <!-- Header -->
+            <div class="chat-header glass">
+                <div class="header-left">
+                    <i class="fas fa-chevron-left"></i>
+                    <div class="header-avatar">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <div class="header-info">
+                        <h3>Keluarga Tercinta <span class="birthday-icon">🎂</span></h3>
+                        <p class="status"><span class="online-dot"></span> Online</p>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <i class="fas fa-video"></i>
+                    <i class="fas fa-phone"></i>
+                    <i class="fas fa-ellipsis-vertical"></i>
+                </div>
+            </div>
+
+            <!-- Area Pesan -->
+            <div class="chat-messages" id="chatMessages">
+                <!-- Pesan akan ditambahkan oleh JavaScript -->
+            </div>
+
+            <!-- Status Mengetik -->
+            <div class="typing-indicator" id="typingIndicator">
+                <span class="typing-dots">Mengetik<span>.</span><span>.</span><span>.</span></span>
+            </div>
+
+            <!-- Tombol Aksi dan Musik -->
+            <div class="chat-footer">
+                <div class="action-buttons">
+                    <button class="action-btn" id="openGiftBtn"><i class="fas fa-gift"></i> Buka Hadiah</button>
+                    <button class="action-btn" id="celebrateAgainBtn"><i class="fas fa-glass-cheers"></i> Rayakan Lagi</button>
+                    <button class="action-btn" id="memoriesBtn"><i class="fas fa-images"></i> Lihat Kenangan</button>
+                </div>
+                <div class="music-control">
+                    <button id="musicBtn" class="music-btn"><i class="fas fa-play"></i> Putar Musik</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Popup Hadiah & Kenangan -->
+    <div class="modal" id="giftModal">
+        <div class="modal-content glass">
+            <span class="close-modal" id="closeGiftModal">&times;</span>
+            <i class="fas fa-star modal-star"></i>
+            <i class="fas fa-star modal-star"></i>
+            <h2>🎁 Selamat!</h2>
+            <p>Semoga tahun ini penuh keberuntungan dan kebahagiaan! ✨</p>
+        </div>
+    </div>
+
+    <div class="modal" id="memoriesModal">
+        <div class="modal-content glass memories-content">
+            <span class="close-modal" id="closeMemoriesModal">&times;</span>
+            <h2><i class="fas fa-camera-retro"></i> Kenangan Keluarga</h2>
+            <div class="family-photos">
+                <div class="photo"><i class="fas fa-users"></i><span>Keluarga 2019</span></div>
+                <div class="photo"><i class="fas fa-user-friends"></i><span>Liburan 2020</span></div>
+                <div class="photo"><i class="fas fa-birthday-cake"></i><span>Ulang Tahun Lalu</span></div>
+                <div class="photo"><i class="fas fa-heart"></i><span>Momen Terkasih</span></div>
+            </div>
+            <p style="margin-top: 10px;">❤️ Kenangan indah selalu bersama kalian.</p>
+        </div>
+    </div>
+
+    <!-- Audio untuk musik ulang tahun (opsional: bisa ganti link) -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+        <!-- Ganti dengan file lokal atau link lagu happy birthday yang tepat -->
+        Browser tidak mendukung audio.
+    </audio>
+
+    <!-- Canvas untuk Confetti & Balon -->
+    <canvas id="confettiCanvas"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
