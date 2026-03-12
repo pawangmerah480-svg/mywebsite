@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>🎣 Fish It Gileg · Ultimate</title>
+  <!-- Fonts akan diisi nanti di CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ======================== SPLASH SCREEN ======================== -->
+<div id="splash">
+  <div class="sp-bg">
+    <div class="sp-sun"></div>
+    <div class="sp-wave w1"></div>
+    <div class="sp-wave w2"></div>
+    <div class="sp-wave w3"></div>
+    <div class="sp-bubbles" id="sp-bubs"></div>
+  </div>
+  <div class="sp-content">
+    <div class="sp-logo">🎣</div>
+    <h1 class="sp-title">Fish It<br><span>Gileg</span></h1>
+    <p class="sp-ver">v7.0 · ULTIMATE EDITION</p>
+    <div class="sp-feat-grid">
+      <span>🎮 Mini Game</span><span>🦈 Boss Fish</span>
+      <span>📦 Treasure</span><span>🌟 Rare Spawn</span>
+      <span>🏆 Tournament</span><span>📖 Collection</span>
+      <span>🎨 Rod Skins</span><span>🌈 Mutation</span>
+      <span>🍾 Mystery</span><span>⚡ Skill Tree</span>
+    </div>
+    <button id="btn-start" class="sp-btn">▶ MULAI MAIN!</button>
+  </div>
+</div>
+
+<!-- ======================== GAME WRAPPER ======================== -->
+<div id="game" class="hidden">
+
+  <!-- ① PLAYER BAR (PALING ATAS) -->
+  <header class="player-bar">
+    <div class="pb-left">
+      <div class="pb-avatar" id="pb-ava">🎣</div>
+      <div class="pb-info">
+        <div class="pb-name" id="pb-name">Gileg</div>
+        <div class="pb-xprow">
+          <div class="pb-xpbg"><div class="pb-xpf" id="pb-xpf" style="width:0%"></div></div>
+          <span class="pb-xt" id="pb-xt">0xp</span>
+        </div>
+      </div>
+      <div class="pb-lv" id="pb-lv">Lv.1</div>
+    </div>
+    <div class="pb-right">
+      <div class="pb-chip" id="pb-coin">💰<span id="h-coin">0</span></div>
+      <div class="pb-chip gem" id="pb-gem">💎<span id="h-gem">0</span></div>
+      <div class="pb-chip frag" id="pb-frag">🔩<span id="h-frag">0</span></div>
+    </div>
+  </header>
+
+  <!-- ② FEATURE MENU (horizontal scroll) -->
+  <nav class="feat-nav" id="feat-nav">
+    <button class="fn-btn active" data-tab="fish">🎣<span>Pancing</span></button>
+    <button class="fn-btn" data-tab="aq">🐟<span>Koleksi</span></button>
+    <button class="fn-btn" data-tab="book">📖<span>Book</span></button>
+    <button class="fn-btn" data-tab="shop">🛒<span>Shop</span></button>
+    <button class="fn-btn" data-tab="ex">💱<span>Exchange</span></button>
+    <button class="fn-btn" data-tab="map">🗺️<span>Map</span></button>
+    <button class="fn-btn" data-tab="daily">📅<span>Daily</span><span class="fn-dot" id="fn-dot" style="display:none">!</span></button>
+    <button class="fn-btn" data-tab="tourn">🏆<span>Turnamen</span></button>
+    <button class="fn-btn" data-tab="skill">⚡<span>Skill</span></button>
+    <button class="fn-btn" data-tab="pet">🐾<span>Pet</span></button>
+    <button class="fn-btn" data-tab="lb">👑<span>Top</span></button>
+    <button class="fn-btn" data-tab="ach">🏅<span>Prestasi</span></button>
+    <button class="fn-btn" data-tab="set">⚙️<span>Setting</span></button>
+  </nav>
+
+  <!-- ③ CONTENT AREA -->
+  <main class="content">
+
+    <!-- ========== TAB FISHING (utama) ========== -->
+    <div id="tab-fish" class="tab active">
+
+      <!-- Weather + event strip -->
+      <div class="wx-strip">
+        <span class="wx-ico" id="wx-ico">☀️</span>
+        <span class="wx-name" id="wx-name">Cerah</span>
+        <span class="wx-sep">|</span>
+        <span class="wx-map" id="wx-map">🌊 River</span>
+        <div class="wx-right">
+          <span class="wx-combo" id="wx-combo"></span>
+          <span class="wx-event" id="wx-event"></span>
+        </div>
+      </div>
+
+      <!-- Canvas world (bisa discroll horizontal) -->
+      <div class="world-wrap" id="world-wrap">
+        <div class="world-inner" id="world-inner">
+          <canvas id="cv"></canvas>
+        </div>
+        <!-- Spot overlay (shallow, deep, dll) -->
+        <div class="spot-overlay" id="spot-overlay"></div>
+        <!-- Rain effect canvas -->
+        <canvas id="cv-rain" class="rain-cv hidden"></canvas>
+        <!-- Weather VFX text -->
+        <div class="wx-vfx" id="wx-vfx"></div>
+        <!-- Secret fish alert -->
+        <div class="secret-alert hidden" id="secret-alert">
+          <span id="secret-ico">🌑</span>
+          <span id="secret-txt">????? 出現!</span>
+        </div>
+      </div>
+
+      <!-- Info strip: rod + bait + max weight -->
+      <div class="info-strip">
+        <div class="is-rod" id="is-rod">🎋 Bamboo</div>
+        <div class="is-bait" id="is-bait">🪱 Worm</div>
+        <div class="is-maxkg" id="is-maxkg">Max 8kg</div>
+        <div class="is-skin" id="is-skin"></div>
+      </div>
+
+      <!-- ACTION PANEL (berisi semua state memancing) -->
+      <div class="action-panel" id="action-panel">
+
+        <!-- IDLE state -->
+        <div class="st active" id="st-idle">
+          <div class="idle-stats">
+            <div class="is-stat"><b id="qs-tc">0</b><s>Tangkap</s></div>
+            <div class="is-stat"><b id="qs-cb">0</b><s>Combo</s></div>
+            <div class="is-stat"><b id="qs-lg">0</b><s>Legend+</s></div>
+            <div class="is-stat"><b id="qs-str">1</b><s>Streak</s></div>
+          </div>
+          <button class="btn-cast" id="btn-cast">
+            <span class="bc-ico">🎣</span>
+            <span class="bc-lbl">LEMPAR KAIL!</span>
+            <span class="bc-sub" id="bc-sub">Pilih umpan & mulai</span>
+          </button>
+        </div>
+
+        <!-- CASTING state -->
+        <div class="st hidden" id="st-cast">
+          <div class="cast-anim">🎣</div>
+          <p class="st-msg">Melempar kail...</p>
+        </div>
+
+        <!-- WAITING state -->
+        <div class="st hidden" id="st-wait">
+          <div class="wait-ring">
+            <svg viewBox="0 0 64 64" class="wring-svg">
+              <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#4facfe"/><stop offset="100%" stop-color="#00f2fe"/>
+              </linearGradient></defs>
+              <circle cx="32" cy="32" r="28" class="wring-bg"/>
+              <circle cx="32" cy="32" r="28" class="wring-arc" id="wring-arc"/>
+            </svg>
+            <span class="wait-ico">🎣</span>
+          </div>
+          <p class="st-msg">Menunggu gigitan...</p>
+          <div class="dots-ani"><span>.</span><span>.</span><span>.</span></div>
+          <button class="btn-cancel" id="btn-cancel">✖ Batalkan</button>
+        </div>
+
+        <!-- BITE state -->
+        <div class="st hidden" id="st-bite">
+          <div class="bite-ico">❗</div>
+          <p class="bite-ttl">IKAN MENGGIGIT!</p>
+          <div class="bite-bar-bg"><div class="bite-bar-f" id="bite-bar"></div></div>
+          <button class="btn-pull" id="btn-pull">
+            <span>💪</span><span>TARIK!</span>
+          </button>
+        </div>
+
+        <!-- REEL MINI GAME state (Fitur #1) -->
+        <div class="st hidden" id="st-reel">
+          <div class="mg-header">
+            <span class="mg-fish-ico" id="mg-ico">🐟</span>
+            <div>
+              <div class="mg-wt" id="mg-wt">?kg</div>
+              <div class="mg-rar rar-Common" id="mg-rar">COMMON</div>
+            </div>
+          </div>
+          <div class="mg-hint">⚡ TAHAN di zona 🟢 — lepas untuk reposisi</div>
+          <!-- Battle bar -->
+          <div class="mg-battle" id="mg-battle">
+            <div class="mg-danger left" id="mg-dl" style="width:22%"></div>
+            <div class="mg-danger right" id="mg-dr" style="width:22%"></div>
+            <div class="mg-zone" id="mg-zone" style="left:22%;width:56%"></div>
+            <div class="mg-cursor" id="mg-cursor" style="left:43%"></div>
+          </div>
+          <div class="mg-tension" id="mg-tension"></div>
+          <!-- Catch progress -->
+          <div class="mg-prog-row">
+            <span class="mg-prog-lbl">Tangkap:</span>
+            <div class="mg-prog-bg"><div class="mg-prog-f" id="mg-pf" style="width:0%"></div></div>
+            <span class="mg-pct" id="mg-pct">0%</span>
+          </div>
+          <!-- Mutation indicator -->
+          <div class="mutation-hint hidden" id="mutation-hint">✨ MUTASI TERDETEKSI!</div>
+          <!-- Tombol tahan (hold) -->
+          <button class="btn-hold" id="btn-reel"
+            onmousedown="window.mgHold=true" onmouseup="window.mgHold=false" onmouseleave="window.mgHold=false"
+            ontouchstart="window.mgHold=true; event.preventDefault()" ontouchend="window.mgHold=false">
+            🎣 TAHAN!
+          </button>
+          <div class="mg-sub">Tahan tombol ketika cursor di zona hijau untuk menangkap</div>
+        </div>
+
+        <!-- TREASURE CHEST state (Fitur #3) -->
+        <div class="st hidden" id="st-chest">
+          <div class="chest-main">
+            <div class="chest-ico anim-float" id="chest-ico">📦</div>
+            <div class="chest-title" id="chest-title">Peti Harta!</div>
+            <div class="chest-glow" id="chest-glow">✨ Sesuatu berkilau di dalam... ✨</div>
+          </div>
+          <button class="btn-chest" id="btn-chest">🔓 Buka Peti!</button>
+        </div>
+
+        <!-- CHEST OPEN state -->
+        <div class="st hidden" id="st-chest-open">
+          <div class="chest-open-ico" id="chest-open-ico">🎊</div>
+          <div class="chest-open-title" id="chest-open-title">Peti Dibuka!</div>
+          <div class="chest-rewards" id="chest-rwds"></div>
+          <button class="btn-primary gold" id="btn-chest-cont">🎣 Mancing Lagi!</button>
+        </div>
+
+        <!-- MYSTERY BOTTLE state (Fitur #17) -->
+        <div class="st hidden" id="st-bottle">
+          <div class="bottle-main">
+            <div class="bottle-ico anim-float">🍾</div>
+            <div class="bottle-title">Botol Misterius!</div>
+            <div class="bottle-sub">Sebuah botol mengapung dari kedalaman laut...</div>
+          </div>
+          <button class="btn-bottle" id="btn-bottle">🔍 Buka Botol!</button>
+        </div>
+
+        <!-- BOTTLE OPEN state -->
+        <div class="st hidden" id="st-bottle-open">
+          <div class="bottle-open-ico" id="bottle-open-ico">📜</div>
+          <div class="bottle-open-title" id="bottle-open-title">Pesan Ditemukan!</div>
+          <div class="bottle-msg" id="bottle-msg"></div>
+          <div class="chest-rewards" id="bottle-rwds"></div>
+          <button class="btn-primary" id="btn-bottle-cont">🎣 Mancing Lagi!</button>
+        </div>
+
+        <!-- BOSS FISH state (Fitur #4) -->
+        <div class="st hidden" id="st-boss">
+          <div class="boss-ico anim-shake" id="boss-ico">🦈</div>
+          <div class="boss-title" id="boss-title">BOSS FISH!</div>
+          <div class="boss-sub" id="boss-sub">Ikan raksasa muncul!</div>
+          <div class="boss-rwds-row" id="boss-rwds"></div>
+          <div class="boss-hp-wrap">
+            <div class="boss-hp-bg"><div class="boss-hp-f" id="boss-hp-f" style="width:100%"></div></div>
+            <span class="boss-hp-txt" id="boss-hp-txt">10/10</span>
+          </div>
+          <button class="btn-boss" id="btn-boss">⚔️ SERANG!</button>
+        </div>
+
+        <!-- ROD BREAK state -->
+        <div class="st hidden" id="st-break">
+          <div class="st-ico">💥</div>
+          <p class="st-ttl">Pancing Putus!</p>
+          <p class="st-sub" id="break-sub">Ikan terlalu berat!</p>
+          <button class="btn-primary" id="btn-break">🎣 Coba Lagi</button>
+        </div>
+
+        <!-- MISS state -->
+        <div class="st hidden" id="st-miss">
+          <div class="st-ico">😫</div>
+          <p class="st-ttl">Ikan Kabur!</p>
+          <p class="st-sub">Waktu habis...</p>
+          <button class="btn-primary" id="btn-miss">🎣 Coba Lagi</button>
+        </div>
+
+        <!-- RESULT state -->
+        <div class="st hidden" id="st-result">
+          <div class="result-card" id="result-card">
+            <div class="result-sparks" id="result-sparks"></div>
+            <div class="result-fish" id="res-ico">🐟</div>
+            <div class="result-tags">
+              <span class="res-rar rar-Common" id="res-rar">COMMON</span>
+              <span class="res-sz" id="res-sz">Kecil</span>
+              <span class="res-kg" id="res-kg">1kg</span>
+              <span class="res-mut hidden" id="res-mut">✨ MUTASI!</span>
+            </div>
+            <div class="res-name" id="res-name">Dogecoin Fish</div>
+            <div class="res-mut-type hidden" id="res-mut-type"></div>
+            <div class="res-rewards">
+              <span class="res-coin" id="res-coin">+30💰</span>
+              <span class="res-xp" id="res-xp">+10XP</span>
+              <span class="res-extra" id="res-extra"></span>
+            </div>
+            <div class="res-bonus" id="res-bonus"></div>
+            <div class="res-btns">
+              <button class="btn-primary" id="btn-cont">🎣 Mancing Lagi!</button>
+              <button class="btn-primary gold" id="btn-save">💰 Simpan</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TOURNAMENT ACTIVE state (Fitur #13) -->
+        <div class="st hidden" id="st-tourn-active">
+          <div class="tourn-timer-wrap">
+            <div class="tourn-label">🏆 TURNAMEN BERLANGSUNG!</div>
+            <div class="tourn-timer" id="tourn-timer">3:00</div>
+            <div class="tourn-best">Ikan terbesar: <span id="tourn-best">-</span></div>
+          </div>
+          <button class="btn-primary" id="btn-tourn-cast">🎣 Mancing Sekarang!</button>
+        </div>
+
+      </div><!-- /action-panel -->
+    </div><!-- /tab-fish -->
+
+    <!-- ========== TAB AQUARIUM / KOLEKSI ========== -->
+    <div id="tab-aq" class="tab hidden">
+      <div class="tab-header"><h2>🐟 Koleksi Ikan</h2><span class="badge" id="aq-badge">0 spesies</span></div>
+      <div class="aq-summary" id="aq-summary"></div>
+      <div class="filter-row">
+        <button class="fbt active" data-f="all">Semua</button>
+        <button class="fbt" data-f="Common">🟢</button>
+        <button class="fbt" data-f="Uncommon">🔵</button>
+        <button class="fbt" data-f="Rare">🟣</button>
+        <button class="fbt" data-f="Epic">🟡</button>
+        <button class="fbt" data-f="Legendary">🔴</button>
+        <button class="fbt" data-f="Mythic">🌈</button>
+        <button class="fbt" data-f="mutation">✨ Mutasi</button>
+      </div>
+      <div class="aq-grid" id="aq-grid"></div>
+    </div>
+
+    <!-- ========== COLLECTION BOOK (Fitur #14) ========== -->
+    <div id="tab-book" class="tab hidden">
+      <div class="tab-header"><h2>📖 Fish Codex</h2><span class="badge" id="book-badge">0/0</span></div>
+      <div class="book-cats" id="book-cats"></div>
+      <div class="book-grid" id="book-grid"></div>
+      <div class="book-rewards" id="book-rewards"></div>
+    </div>
+
+    <!-- ========== SHOP (Fitur #6, #7, #15) ========== -->
+    <div id="tab-shop" class="tab hidden">
+      <div class="tab-header"><h2>🛒 Toko</h2><span class="badge" id="sh-bal">💰 0</span></div>
+      <div class="shop-tabs">
+        <button class="stab active" data-sp="rods">🎣 Rod</button>
+        <button class="stab" data-sp="baits">🪱 Umpan</button>
+        <button class="stab" data-sp="skins">🎨 Skin</button>
+        <button class="stab" data-sp="spec">✨ Boost</button>
+      </div>
+      <div id="sp-rods"  class="sp-panel active"></div>
+      <div id="sp-baits" class="sp-panel hidden"></div>
+      <div id="sp-skins" class="sp-panel hidden"></div>
+      <div id="sp-spec"  class="sp-panel hidden"></div>
+    </div>
+
+    <!-- ========== EXCHANGE (Fitur tambahan) ========== -->
+    <div id="tab-ex" class="tab hidden">
+      <div class="tab-header"><h2>💱 Exchange</h2></div>
+      <div class="ex-tabs">
+        <button class="etab active" data-ep="trade">🐟 Trade</button>
+        <button class="etab" data-ep="coin">💰 Coin</button>
+        <button class="etab" data-ep="gacha">🎁 Gacha</button>
+        <button class="etab" data-ep="fusion">🔀 Fusi</button>
+        <button class="etab" data-ep="daily">📅 Daily</button>
+        <button class="etab" data-ep="frags">🔩 Frags</button>
+      </div>
+      <div id="ep-trade"  class="ep-panel active"></div>
+      <div id="ep-coin"   class="ep-panel hidden"></div>
+      <div id="ep-gacha"  class="ep-panel hidden"></div>
+      <div id="ep-fusion" class="ep-panel hidden"></div>
+      <div id="ep-daily"  class="ep-panel hidden"></div>
+      <div id="ep-frags"  class="ep-panel hidden"></div>
+    </div>
+
+    <!-- ========== MAP (Fitur #11) ========== -->
+    <div id="tab-map" class="tab hidden">
+      <div class="tab-header"><h2>🗺️ Lokasi</h2><span class="badge" id="map-badge">River</span></div>
+      <p class="tab-hint">Buka lokasi baru dengan naik level!</p>
+      <div class="map-grid" id="map-grid"></div>
+    </div>
+
+    <!-- ========== DAILY REWARD (Fitur #9) ========== -->
+    <div id="tab-daily" class="tab hidden">
+      <div class="tab-header"><h2>📅 Daily Reward</h2></div>
+      <div class="dr-header">
+        <div class="dr-streak" id="dr-streak">🔥 Streak: 1 Hari</div>
+        <div class="dr-sub">Login tiap hari untuk bonus!</div>
+      </div>
+      <div class="dr-calendar" id="dr-calendar"></div>
+      <div class="dr-claim-area">
+        <button class="btn-claim" id="btn-dr-claim">🎁 Klaim Hari Ini!</button>
+        <p class="dr-note" id="dr-note"></p>
+      </div>
+    </div>
+
+    <!-- ========== TOURNAMENT (Fitur #13) ========== -->
+    <div id="tab-tourn" class="tab hidden">
+      <div class="tab-header"><h2>🏆 Turnamen</h2><span class="badge" id="tourn-badge">Standby</span></div>
+      <div class="tourn-card" id="tourn-card">
+        <div class="tc-header">
+          <div class="tc-ico">🏆</div>
+          <div class="tc-info">
+            <div class="tc-title">Fishing Tournament</div>
+            <div class="tc-desc">Tangkap ikan terbesar dalam waktu terbatas!</div>
+          </div>
+        </div>
+        <div class="tc-rules">
+          <div class="tc-rule">⏱️ Durasi: 3 menit</div>
+          <div class="tc-rule">🎯 Goal: Ikan terberat menang</div>
+          <div class="tc-rule">🏅 Reward: Coin + Diamond</div>
+        </div>
+        <div class="tc-prize">
+          <div class="tp">🥇 1st: 3000💰 + 10💎</div>
+          <div class="tp">🥈 2nd: 1500💰 + 5💎</div>
+          <div class="tp">🥉 3rd: 700💰 + 2💎</div>
+        </div>
+        <button class="btn-start-tourn" id="btn-start-tourn">🚀 Mulai Turnamen!</button>
+      </div>
+      <div class="tourn-lb" id="tourn-lb"></div>
+    </div>
+
+    <!-- ========== SKILL TREE (Fitur #18) ========== -->
+    <div id="tab-skill" class="tab hidden">
+      <div class="tab-header"><h2>⚡ Skill Tree</h2><span class="badge" id="sk-pts">0 pt</span></div>
+      <p class="tab-hint">Naik level = +1 Skill Point</p>
+      <div class="skill-tree" id="skill-tree"></div>
+    </div>
+
+    <!-- ========== PET (Fitur #8) ========== -->
+    <div id="tab-pet" class="tab hidden">
+      <div class="tab-header"><h2>🐾 Pet</h2><span class="badge" id="pet-badge">Tidak ada</span></div>
+      <div class="pet-grid" id="pet-grid"></div>
+    </div>
+
+    <!-- ========== LEADERBOARD (Fitur #10) ========== -->
+    <div id="tab-lb" class="tab hidden">
+      <div class="tab-header"><h2>👑 Leaderboard</h2></div>
+      <div class="lb-tabs">
+        <button class="lbt active" data-lb="catch">🐟 Tangkap</button>
+        <button class="lbt" data-lb="coin">💰 Coin</button>
+        <button class="lbt" data-lb="heavy">⚖️ Terberat</button>
+        <button class="lbt" data-lb="boss">⚔️ Boss</button>
+      </div>
+      <div class="lb-list" id="lb-list"></div>
+    </div>
+
+    <!-- ========== ACHIEVEMENTS (Prestasi) ========== -->
+    <div id="tab-ach" class="tab hidden">
+      <div class="tab-header"><h2>🏅 Prestasi</h2><span class="badge" id="ach-badge">0/0</span></div>
+      <div class="ach-grid" id="ach-grid"></div>
+    </div>
+
+    <!-- ========== SETTINGS ========== -->
+    <div id="tab-set" class="tab hidden">
+      <div class="tab-header"><h2>⚙️ Pengaturan</h2></div>
+      <div class="set-list">
+        <div class="set-row"><span>🔊 Suara</span><label class="toggle"><input type="checkbox" id="tog-sfx" checked/><span class="tsl"></span></label></div>
+        <div class="set-row"><span>🏷️ Nama</span><input type="text" class="name-input" id="name-input" maxlength="16" placeholder="Nama kamu..."/></div>
+        <div class="set-row col"><span>📊 Statistik</span><div class="stat-detail" id="stat-detail"></div></div>
+        <div class="set-row"><span class="danger-txt">🗑️ Reset Semua</span><button class="btn-danger" id="btn-reset">Reset</button></div>
+      </div>
+      <div class="credits">🎣 <b>Fish It Gileg v7.0</b><br/>Ultimate Edition · 20 Fitur Lengkap</div>
+    </div>
+
+  </main>
+</div><!-- /game -->
+
+<!-- ======================== MODALS ======================== -->
+<!-- Level Up Modal -->
+<div class="modal-ov hidden" id="mod-lvl">
+  <div class="modal gold-mod">
+    <div class="m-ico">⭐</div><h2>LEVEL UP!</h2>
+    <p class="m-sub" id="mlvl-t">Level 2!</p><p id="mlvl-b"></p>
+    <button class="btn-ok" id="btn-lvl-ok">🎉 Mantap!</button>
+  </div>
+</div>
+
+<!-- Daily Claim Modal -->
+<div class="modal-ov hidden" id="mod-daily">
+  <div class="modal gold-mod">
+    <div class="m-ico">📅</div><h2>Login Bonus!</h2>
+    <p class="m-sub" id="mdr-t">Hari ke-1</p><p id="mdr-b">+100 Coin!</p>
+    <div class="streak-dots" id="mdr-dots"></div>
+    <button class="btn-ok" id="btn-dr-ok">🎁 Ambil!</button>
+  </div>
+</div>
+
+<!-- Achievement Modal -->
+<div class="modal-ov hidden" id="mod-ach">
+  <div class="modal gold-mod">
+    <div class="m-ico" id="mach-i">🏅</div><h2>Achievement!</h2>
+    <p class="m-sub" id="mach-n">-</p><p id="mach-r">-</p>
+    <button class="btn-ok" id="btn-ach-ok">🎉 Keren!</button>
+  </div>
+</div>
+
+<!-- Boss Warning Modal -->
+<div class="modal-ov hidden" id="mod-boss">
+  <div class="modal danger-mod">
+    <div class="m-ico" id="mboss-i">🦈</div>
+    <h2 id="mboss-t">BOSS MUNCUL!</h2>
+    <p id="mboss-d">Ikan raksasa menyerang!</p>
+    <button class="btn-ok" id="btn-boss-ok">⚔️ Hadapi!</button>
+  </div>
+</div>
+
+<!-- Secret Fish Modal -->
+<div class="modal-ov hidden" id="mod-secret">
+  <div class="modal secret-mod">
+    <div class="m-ico" id="msec-i">🌑</div>
+    <h2 id="msec-t">????? TERDETEKSI!</h2>
+    <p id="msec-d">Makhluk misterius mendekati umpanmu!</p>
+    <button class="btn-ok" id="btn-secret-ok">🎣 Siap!</button>
+  </div>
+</div>
+
+<!-- Event Modal -->
+<div class="modal-ov hidden" id="mod-event">
+  <div class="modal event-mod">
+    <div class="m-ico" id="mev-i">🌟</div>
+    <h2 id="mev-t">Event!</h2><p id="mev-d">-</p>
+    <button class="btn-ok" id="btn-event-ok">🎣 Mulai!</button>
+  </div>
+</div>
+
+<!-- Tournament End Modal -->
+<div class="modal-ov hidden" id="mod-tourn-end">
+  <div class="modal gold-mod">
+    <div class="m-ico">🏆</div><h2>Turnamen Selesai!</h2>
+    <p class="m-sub" id="mte-sub">-</p>
+    <div class="tourn-result" id="mte-body"></div>
+    <button class="btn-ok" id="btn-tourn-end-ok">🎉 Mantap!</button>
+  </div>
+</div>
+
+<!-- Reset Confirm Modal -->
+<div class="modal-ov hidden" id="mod-reset">
+  <div class="modal">
+    <div class="m-ico">⚠️</div><h2 style="color:#ff6666">Reset?</h2>
+    <p>Semua progress akan hilang!</p>
+    <div class="m-btns">
+      <button class="btn-red" id="btn-reset-yes">Ya, Reset!</button>
+      <button class="btn-sec" id="btn-reset-no">Batal</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== NOTIFICATIONS ======================== -->
+<!-- Rare notification -->
+<div class="rn hidden" id="rn">
+  <span class="rn-ico" id="rn-ico">🌟</span>
+  <span id="rn-txt">Rare!</span>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
