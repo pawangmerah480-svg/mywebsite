@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>⚔️ PIXEL WAR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ========== TITLE SCREEN ========== -->
+<div id="title-screen">
+  <div class="title-bg-anim"></div>
+  <div class="title-content">
+    <div class="title-logo">⚔️ PIXEL WAR</div>
+    <div class="title-sub">STRATEGY BATTLES</div>
+    <canvas id="title-canvas" width="400" height="100"></canvas>
+    <div class="title-menu">
+      <button id="btn-start" class="pixel-btn primary-btn">▶ NEW GAME</button>
+      <button id="btn-leaderboard" class="pixel-btn secondary-btn">🏆 LEADERBOARD</button>
+      <button id="btn-daily" class="pixel-btn daily-btn">🎁 DAILY REWARD</button>
+    </div>
+    <div class="title-tip">Click units to select · Drag canvas to pan · Scroll to zoom</div>
+  </div>
+</div>
+
+<!-- ========== DAILY REWARD MODAL ========== -->
+<div id="daily-modal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-title">🎁 DAILY REWARD</div>
+    <div id="daily-content" class="modal-content"></div>
+    <button id="btn-claim" class="pixel-btn primary-btn">✅ CLAIM!</button>
+    <button id="btn-close-daily" class="pixel-btn secondary-btn">✖ CLOSE</button>
+  </div>
+</div>
+
+<!-- ========== LEADERBOARD MODAL ========== -->
+<div id="lb-modal" class="modal-overlay hidden">
+  <div class="modal-box">
+    <div class="modal-title">🏆 LEADERBOARD</div>
+    <div id="lb-content" class="modal-content"></div>
+    <button id="btn-close-lb" class="pixel-btn secondary-btn">✖ CLOSE</button>
+  </div>
+</div>
+
+<!-- ========== ACHIEVEMENT TOAST ========== -->
+<div id="ach-toast" class="hidden">
+  <div class="ach-icon-big">🏅</div>
+  <div>
+    <div class="ach-toast-title">ACHIEVEMENT UNLOCKED!</div>
+    <div id="ach-toast-name"></div>
+  </div>
+</div>
+
+<!-- ========== COMBO TEXT ========== -->
+<div id="combo-text" class="hidden"></div>
+
+<!-- ========== BOSS ALERT ========== -->
+<div id="boss-alert" class="hidden">⚠️ BOSS INCOMING! ⚠️</div>
+
+<!-- ========== GAME CONTAINER ========== -->
+<div id="game-container" class="hidden">
+
+  <!-- TOP HUD -->
+  <div id="hud">
+    <div class="hud-left">
+      <div class="res-chip">🪙 <span id="gold-val">200</span></div>
+      <div class="res-chip">🌾 <span id="food-val">100</span></div>
+      <div class="res-chip xp-chip">
+        ⭐ <span id="xp-val">0</span>
+        <div class="xp-track"><div id="xp-fill"></div></div>
+        <span id="lv-val">Lv1</span>
+      </div>
+    </div>
+    <div class="hud-center">
+      <div class="wave-badge">WAVE <span id="wave-num">1</span></div>
+      <div id="game-msg">Select a unit or build troops!</div>
+    </div>
+    <div class="hud-right">
+      <button id="btn-next-wave" class="pixel-btn wave-btn">⚡ NEXT WAVE</button>
+      <button id="btn-pause" class="pixel-btn pause-btn">⏸</button>
+    </div>
+  </div>
+
+  <!-- MAIN GAME AREA -->
+  <div id="main-area">
+    <div id="canvas-wrap">
+      <canvas id="game-canvas"></canvas>
+      <canvas id="fx-canvas"></canvas>
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div id="sidebar">
+
+      <!-- Unit Info Panel -->
+      <div class="s-panel" id="unit-panel">
+        <div class="s-title">📋 UNIT INFO</div>
+        <div class="portrait-row">
+          <canvas id="unit-portrait" width="48" height="48"></canvas>
+          <div id="unit-name-disp">—</div>
+        </div>
+        <div class="hp-row">
+          <span>❤️</span>
+          <div class="bar-track"><div id="hp-fill" class="bar-fill hp-col"></div></div>
+          <span id="hp-txt">—</span>
+        </div>
+        <div class="stats-grid">
+          <span class="sl">⚔️</span><span id="s-atk">—</span>
+          <span class="sl">🛡</span><span id="s-def">—</span>
+          <span class="sl">🎯</span><span id="s-rng">—</span>
+          <span class="sl">🏃</span><span id="s-spd">—</span>
+        </div>
+        <div id="unit-action-btns" class="hidden">
+          <button id="btn-move-mode" class="pixel-btn ab move-ab">🚶MOVE</button>
+          <button id="btn-atk-mode" class="pixel-btn ab atk-ab">⚔️ATK</button>
+          <button id="btn-upgrade-unit" class="pixel-btn ab upg-ab">⬆️UPG</button>
+        </div>
+      </div>
+
+      <!-- Build Panel -->
+      <div class="s-panel" id="build-panel">
+        <div class="s-title">🏗 BUILD TROOPS</div>
+        <button class="pixel-btn build-btn" data-type="infantry">🗡 Infantry<span class="ctag">50g 10f</span></button>
+        <button class="pixel-btn build-btn" data-type="archer">🏹 Archer<span class="ctag">70g 15f</span></button>
+        <button class="pixel-btn build-btn locked" data-type="cavalry" id="bb-cavalry">🐴 Cavalry<span class="ctag">100g 20f</span></button>
+        <button class="pixel-btn build-btn locked" data-type="tank" id="bb-tank">🛡 Tank<span class="ctag">150g 30f</span></button>
+        <div id="unlock-hint" class="unlock-hint"></div>
+      </div>
+
+      <!-- Skins Panel -->
+      <div class="s-panel" id="skin-panel">
+        <div class="s-title">🎨 SKINS</div>
+        <div id="skin-list"></div>
+      </div>
+
+      <!-- Minimap -->
+      <div class="s-panel" id="mini-panel">
+        <div class="s-title">🗺 MINIMAP</div>
+        <canvas id="minimap" width="148" height="90"></canvas>
+      </div>
+
+      <!-- Achievements -->
+      <div class="s-panel" id="ach-panel">
+        <div class="s-title">🏅 ACHIEVEMENTS</div>
+        <div id="ach-list"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ========== PAUSE SCREEN ========== -->
+<div id="pause-screen" class="ov-screen hidden">
+  <div class="ov-box">
+    <div class="ov-title">⏸ PAUSED</div>
+    <button id="btn-resume" class="pixel-btn primary-btn">▶ RESUME</button>
+    <button id="btn-quit" class="pixel-btn secondary-btn">🏠 MAIN MENU</button>
+  </div>
+</div>
+
+<!-- ========== WIN SCREEN ========== -->
+<div id="win-screen" class="ov-screen hidden">
+  <div class="ov-box win-box">
+    <div class="ov-title win-title">🏆 VICTORY!</div>
+    <div id="win-stats" class="end-stats"></div>
+    <div class="chest-area">
+      <canvas id="chest-canvas" width="80" height="80"></canvas>
+      <div id="chest-reward" class="chest-reward"></div>
+    </div>
+    <button id="btn-next-level" class="pixel-btn primary-btn">▶ NEXT WAVE</button>
+    <button id="btn-menu-win" class="pixel-btn secondary-btn">🏠 MENU</button>
+  </div>
+</div>
+
+<!-- ========== LOSE SCREEN ========== -->
+<div id="lose-screen" class="ov-screen hidden">
+  <div class="ov-box lose-box">
+    <div class="ov-title lose-title">💀 DEFEAT!</div>
+    <div id="lose-stats" class="end-stats"></div>
+    <button id="btn-retry" class="pixel-btn primary-btn">🔄 RETRY</button>
+    <button id="btn-menu-lose" class="pixel-btn secondary-btn">🏠 MENU</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
