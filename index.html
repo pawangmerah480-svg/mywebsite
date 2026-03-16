@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>School Escape 🎒</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== MENU ===== -->
+<div id="screen-menu" class="screen active">
+  <div class="menu-bg">
+    <div class="pixel-stars"></div>
+    <div class="menu-container">
+      <div class="logo-wrap">
+        <div class="logo-icon">🎒</div>
+        <h1 class="logo-title">SCHOOL<br/><span>ESCAPE</span></h1>
+        <p class="logo-sub">Kabur dari sekolah tanpa ketahuan guru!</p>
+      </div>
+      <div class="menu-coins-display">
+        <span class="coin-icon">🪙</span>
+        <span id="menu-coins">0</span>
+        <span class="coin-label">KOIN</span>
+      </div>
+      <div class="menu-btns">
+        <button class="btn btn-primary" id="btn-play">▶ MAIN</button>
+        <button class="btn btn-secondary" id="btn-levels">📋 PILIH LEVEL</button>
+        <button class="btn btn-shop" id="btn-shop">🛒 TOKO</button>
+        <button class="btn btn-upgrade" id="btn-upgrade">⬆ UPGRADE</button>
+        <button class="btn btn-secondary" id="btn-achievements">🏆 ACHIEVEMENTS</button>
+        <button class="btn btn-secondary" id="btn-skins">👕 SKIN</button>
+      </div>
+      <div class="menu-footer">
+        <span id="best-score-display">Best Score: 0</span>
+        <span>|</span>
+        <span id="level-display">Level: 1</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== LEVELS ===== -->
+<div id="screen-levels" class="screen">
+  <div class="overlay-screen">
+    <h2>📋 Pilih Level</h2>
+    <div class="levels-grid" id="levels-grid"></div>
+    <button class="btn btn-back" id="btn-back-levels">← Kembali</button>
+  </div>
+</div>
+
+<!-- ===== SHOP ===== -->
+<div id="screen-shop" class="screen">
+  <div class="overlay-screen wide">
+    <div class="shop-header">
+      <h2>🛒 Toko Sekolah</h2>
+      <div class="shop-coins-badge">🪙 <span id="shop-coins-display">0</span> koin</div>
+    </div>
+    <p class="shop-subtitle">Beli item untuk dipakai saat bermain. Tekan Q untuk menggunakan item aktif.</p>
+    <div class="shop-grid" id="shop-grid"></div>
+    <div class="shop-owned-section">
+      <h3>🎒 Item Siap Pakai</h3>
+      <div id="shop-owned-list" class="shop-owned-list"></div>
+    </div>
+    <button class="btn btn-back" id="btn-back-shop">← Kembali</button>
+  </div>
+</div>
+
+<!-- ===== UPGRADE ===== -->
+<div id="screen-upgrade" class="screen">
+  <div class="overlay-screen wide">
+    <div class="shop-header">
+      <h2>⬆ Upgrade Karakter</h2>
+      <div class="shop-coins-badge">🪙 <span id="upgrade-coins-display">0</span> koin</div>
+    </div>
+    <p class="shop-subtitle">Tingkatkan kemampuan secara permanen menggunakan koin!</p>
+    <div class="upgrade-grid" id="upgrade-grid"></div>
+    <button class="btn btn-back" id="btn-back-upgrade">← Kembali</button>
+  </div>
+</div>
+
+<!-- ===== SKINS ===== -->
+<div id="screen-skins" class="screen">
+  <div class="overlay-screen">
+    <h2>👕 Ganti Skin</h2>
+    <div class="skins-grid" id="skins-grid"></div>
+    <button class="btn btn-back" id="btn-back-skins">← Kembali</button>
+  </div>
+</div>
+
+<!-- ===== ACHIEVEMENTS ===== -->
+<div id="screen-achievements" class="screen">
+  <div class="overlay-screen">
+    <h2>🏆 Achievements</h2>
+    <div class="achievements-list" id="achievements-list"></div>
+    <button class="btn btn-back" id="btn-back-ach">← Kembali</button>
+  </div>
+</div>
+
+<!-- ===== GAME ===== -->
+<div id="screen-game" class="screen">
+  <!-- Alarm red overlay -->
+  <div id="alarm-overlay"></div>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div id="hud-left">
+      <div class="hud-item">
+        <span class="hud-label">⏱ WAKTU</span>
+        <span id="hud-timer" class="hud-val">03:00</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">⚡ STAMINA</span>
+        <div class="bar-wrap"><div id="stamina-bar" class="bar stamina"></div></div>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">🪙 KOIN</span>
+        <span id="hud-coins" class="hud-val" style="color:#f5a623">0</span>
+      </div>
+    </div>
+    <div id="hud-center">
+      <span id="hud-level-badge">LEVEL 1</span>
+      <span id="hud-alert" class="alert-text hidden"></span>
+      <div id="hud-alarm" class="alarm-hud hidden">
+        <span>🚨 ALARM AKTIF!</span>
+        <span id="alarm-timer-txt">10s</span>
+      </div>
+    </div>
+    <div id="hud-right">
+      <div class="hud-right-col">
+        <div id="active-items-bar">
+          <span class="hud-label">Q: ITEM AKTIF</span>
+          <div id="active-items-slots"></div>
+        </div>
+        <div id="inventory-bar"></div>
+      </div>
+      <div id="mini-map-wrap">
+        <canvas id="mini-map" width="110" height="110"></canvas>
+        <span class="map-label">MAP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Canvas -->
+  <canvas id="game-canvas"></canvas>
+
+  <!-- Smoke overlay -->
+  <div id="smoke-overlay" class="hidden"></div>
+
+  <div id="controls-hint">WASD: Gerak | Shift: Lari | E: Interaksi | Q: Pakai Item Aktif | ESC: Pause</div>
+</div>
+
+<!-- ===== PAUSE ===== -->
+<div id="screen-pause" class="screen">
+  <div class="modal-box">
+    <h2>⏸ PAUSE</h2>
+    <div class="pause-coins-row">🪙 <span id="pause-coins">0</span> koin terkumpul</div>
+    <button class="btn btn-primary"   id="btn-resume">▶ Lanjutkan</button>
+    <button class="btn btn-secondary" id="btn-restart">🔄 Restart</button>
+    <button class="btn btn-danger"    id="btn-pause-menu">🏠 Menu Utama</button>
+  </div>
+</div>
+
+<!-- ===== GAME OVER ===== -->
+<div id="screen-gameover" class="screen">
+  <div class="modal-box danger">
+    <div class="modal-icon">😱</div>
+    <h2>KETAHUAN!</h2>
+    <p id="gameover-msg"></p>
+    <div id="gameover-stats"></div>
+    <button class="btn btn-primary"   id="btn-retry">🔄 Coba Lagi</button>
+    <button class="btn btn-secondary" id="btn-go-menu">🏠 Menu Utama</button>
+  </div>
+</div>
+
+<!-- ===== WIN ===== -->
+<div id="screen-win" class="screen">
+  <div class="modal-box success">
+    <div class="modal-icon">🎉</div>
+    <h2>KABUR BERHASIL!</h2>
+    <div id="win-stats"></div>
+    <div id="win-coins-earned" class="win-coins-row"></div>
+    <button class="btn btn-primary"   id="btn-next-level">▶ Level Berikutnya</button>
+    <button class="btn btn-secondary" id="btn-win-menu">🏠 Menu Utama</button>
+  </div>
+</div>
+
+<!-- ===== NOTIFICATION ===== -->
+<div id="notification" class="notification hidden"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
