@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WA Exploit Matrix | Quantum Core</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ WHATSAPP EXPLOIT MATRIX v4.0 ⚡</h1>
+            <p>[ QUANTUM BUG EXPLOITATION SYSTEM - DARK WEB EDITION ]</p>
+            <div class="glitch-text">━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+        </div>
+
+        <div class="matrix-grid">
+            <div class="card">
+                <h3>📱 TARGET NUMBER</h3>
+                <input type="text" id="targetNumber" placeholder="+62XXXXXXXXXX">
+                <button onclick="window.exploitEngine.scanNumber()">🔍 SCAN TARGET</button>
+                <div class="status" id="scanStatus">Status: Ready</div>
+            </div>
+
+            <div class="card">
+                <h3>💣 EXPLOIT MODULES</h3>
+                <select id="exploitType">
+                    <option value="crash">Crash Exploit (CVE-2024-XXXX)</option>
+                    <option value="flood">Message Flooder (1000 msg/s)</option>
+                    <option value="freeze">Freeze Protocol v2</option>
+                    <option value="bug">Bug Matrix Injection</option>
+                    <option value="ddos">Call DDoS Attack</option>
+                    <option value="bomb">WA Bomb Massal</option>
+                </select>
+                <button onclick="window.exploitEngine.executeExploit()">▶ EXECUTE EXPLOIT</button>
+                <button onclick="window.exploitEngine.stopAttack()">⏹ STOP ATTACK</button>
+            </div>
+
+            <div class="card">
+                <h3>🎯 BUG CONFIGURATION</h3>
+                <label>Intensity (1-10):</label>
+                <input type="range" id="intensity" min="1" max="10" value="5">
+                <label>Delay (ms):</label>
+                <input type="number" id="delay" value="50" min="10" max="500">
+                <label>Threads:</label>
+                <input type="number" id="threads" value="10" min="1" max="50">
+                <label>Custom Message:</label>
+                <input type="text" id="customMsg" placeholder="Pesan spam...">
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>⚙ PROGRESS & STATUS</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="stats-grid">
+                <div>Packets Sent: <span id="packetCount">0</span></div>
+                <div>Success Rate: <span id="successRate">0</span>%</div>
+                <div>Active Threads: <span id="activeThreads">0</span></div>
+                <div>Target Status: <span id="targetStatus">Unknown</span></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📝 EXPLOIT LOG</h3>
+            <div class="log-area" id="logArea">
+                <div class="log-entry success">[SYSTEM] Quantum Exploit Matrix Initialized</div>
+                <div class="log-entry success">[SYSTEM] All modules loaded successfully</div>
+                <div class="log-entry warning">[READY] Waiting for target input</div>
+            </div>
+            <button onclick="window.exploitEngine.clearLog()">🗑 CLEAR LOG</button>
+        </div>
+    </div>
+
+    <script src="exploit-engine.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
