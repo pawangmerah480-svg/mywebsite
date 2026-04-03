@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PolyOracle — AI Prediction Bot</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- BACKGROUND GRID -->
+  <div class="bg-grid"></div>
+  <div class="bg-glow"></div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">
+      <span class="logo-icon">◈</span>
+      <div>
+        <span class="logo-text">PolyOracle</span>
+        <span class="logo-sub">AI Prediction Intelligence</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-dot" id="statusDot"></div>
+      <span class="status-text" id="statusText">Siap</span>
+      <button class="btn-icon" id="langToggle" title="Toggle Language">🌐 ID</button>
+      <button class="btn-icon" id="settingsBtn" title="Settings">⚙</button>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <main class="main-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="scanner">
+          <span class="nav-icon">📡</span>
+          <span class="nav-label">Market Scanner</span>
+        </button>
+        <button class="nav-item" data-tab="predict">
+          <span class="nav-icon">🔮</span>
+          <span class="nav-label">Prediksi AI</span>
+        </button>
+        <button class="nav-item" data-tab="sentiment">
+          <span class="nav-icon">🧠</span>
+          <span class="nav-label">Sentiment</span>
+        </button>
+        <button class="nav-item" data-tab="arbitrage">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-label">Arbitrage</span>
+        </button>
+        <button class="nav-item" data-tab="kelly">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Kelly Criterion</span>
+        </button>
+        <button class="nav-item" data-tab="backtest">
+          <span class="nav-icon">📈</span>
+          <span class="nav-label">Backtesting</span>
+        </button>
+        <button class="nav-item" data-tab="portfolio">
+          <span class="nav-icon">💼</span>
+          <span class="nav-label">Portfolio</span>
+        </button>
+        <button class="nav-item" data-tab="history">
+          <span class="nav-icon">🕒</span>
+          <span class="nav-label">Riwayat</span>
+        </button>
+      </nav>
+
+      <!-- USER PROFILE CARD -->
+      <div class="profile-card">
+        <div class="profile-header">
+          <span class="profile-avatar">👤</span>
+          <div>
+            <div class="profile-name" id="profileName">User</div>
+            <div class="profile-risk" id="profileRisk">Risk: Medium</div>
+          </div>
+          <button class="btn-edit-profile" id="editProfileBtn">✎</button>
+        </div>
+        <div class="profile-stats">
+          <div class="pstat">
+            <span class="pstat-val" id="statWinRate">—</span>
+            <span class="pstat-lbl">Win Rate</span>
+          </div>
+          <div class="pstat">
+            <span class="pstat-val" id="statPredictions">0</span>
+            <span class="pstat-lbl">Prediksi</span>
+          </div>
+          <div class="pstat">
+            <span class="pstat-val" id="statROI">—</span>
+            <span class="pstat-lbl">Est. ROI</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT AREA -->
+    <div class="content-area">
+
+      <!-- ========== TAB: MARKET SCANNER ========== -->
+      <section class="tab-panel active" id="tab-scanner">
+        <div class="panel-header">
+          <h2>📡 Real-Time Market Scanner</h2>
+          <p class="panel-desc">Input data pasar Polymarket untuk dianalisis AI secara mendalam</p>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="category-chips">
+          <button class="chip active" data-cat="all">Semua</button>
+          <button class="chip" data-cat="politics">🗳 Politik</button>
+          <button class="chip" data-cat="crypto">₿ Crypto</button>
+          <button class="chip" data-cat="sports">⚽ Olahraga</button>
+          <button class="chip" data-cat="entertainment">🎬 Entertainment</button>
+          <button class="chip" data-cat="economy">📉 Ekonomi</button>
+          <button class="chip" data-cat="custom">🔧 Custom</button>
+        </div>
+
+        <!-- Input Form -->
+        <div class="input-card">
+          <h3 class="card-title">➕ Tambah Market Baru</h3>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>Judul / Pertanyaan Market</label>
+              <input type="text" id="marketTitle" placeholder="Contoh: Will BTC reach $100k by end of 2025?" class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Probabilitas YES saat ini (%)</label>
+              <input type="number" id="marketYes" placeholder="65" min="0" max="100" class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Probabilitas NO saat ini (%)</label>
+              <input type="number" id="marketNo" placeholder="35" min="0" max="100" class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Volume (USDC)</label>
+              <input type="number" id="marketVolume" placeholder="150000" class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Deadline / Tanggal Resolve</label>
+              <input type="date" id="marketDeadline" class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Kategori</label>
+              <select id="marketCategory" class="input-field">
+                <option value="politics">🗳 Politik</option>
+                <option value="crypto">₿ Crypto</option>
+                <option value="sports">⚽ Olahraga</option>
+                <option value="entertainment">🎬 Entertainment</option>
+                <option value="economy">📉 Ekonomi</option>
+                <option value="custom">🔧 Custom</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>Context Tambahan (opsional)</label>
+              <textarea id="marketContext" placeholder="Tambahkan informasi relevan: berita terkini, data historis, atau konteks khusus..." class="input-field textarea" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-primary" id="addMarketBtn">
+              <span>⚡ Analisis dengan AI</span>
+            </button>
+            <button class="btn-secondary" id="clearFormBtn">✕ Reset</button>
+          </div>
+        </div>
+
+        <!-- Market Cards Grid -->
+        <div class="markets-grid" id="marketsGrid">
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon">◈</div>
+            <p>Belum ada market. Tambahkan market di atas untuk mulai analisis.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== TAB: PREDIKSI AI ========== -->
+      <section class="tab-panel" id="tab-predict">
+        <div class="panel-header">
+          <h2>🔮 Prediksi AI — Deep Analysis</h2>
+          <p class="panel-desc">Kirim gambar atau teks market untuk prediksi mendalam dengan chain-of-thought reasoning</p>
+        </div>
+
+        <div class="predict-layout">
+          <!-- Chat Interface -->
+          <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+              <div class="chat-message bot">
+                <div class="chat-avatar">◈</div>
+                <div class="chat-bubble">
+                  <p>Halo! Saya <strong>PolyOracle AI</strong> — sistem prediksi pasar prediksi berbasis AI.</p>
+                  <p>Saya bisa membantu:</p>
+                  <ul>
+                    <li>🔮 Prediksi probabilitas "true" vs harga pasar</li>
+                    <li>📰 Analisis sentimen berita & media sosial</li>
+                    <li>📊 Pattern recognition historis</li>
+                    <li>💡 Rekomendasi beli/jual dengan reasoning</li>
+                    <li>🖼 Analisis screenshot dari Polymarket</li>
+                  </ul>
+                  <p>Ceritakan market apa yang ingin Anda analisis!</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Image Upload Preview -->
+            <div class="image-preview-area" id="imagePreviewArea" style="display:none;">
+              <img id="imagePreview" src="" alt="Preview" />
+              <button class="btn-remove-img" id="removeImageBtn">✕</button>
+            </div>
+
+            <div class="chat-input-area">
+              <label class="btn-attach" title="Upload gambar">
+                📎
+                <input type="file" id="imageUpload" accept="image/*" style="display:none;" />
+              </label>
+              <textarea class="chat-input" id="chatInput" placeholder="Tanya atau paste data market di sini... (Enter kirim, Shift+Enter baris baru)" rows="2"></textarea>
+              <button class="btn-send" id="sendBtn">
+                <span id="sendIcon">↑</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Templates -->
+          <div class="templates-panel">
+            <h3>⚡ Quick Templates</h3>
+            <div class="template-list">
+              <button class="template-btn" data-template="predict-basic">
+                <span class="t-icon">🔮</span>
+                <span>Prediksi Probabilitas</span>
+              </button>
+              <button class="template-btn" data-template="sentiment">
+                <span class="t-icon">📰</span>
+                <span>Analisis Sentimen</span>
+              </button>
+              <button class="template-btn" data-template="value-bet">
+                <span class="t-icon">💰</span>
+                <span>Value Bet Check</span>
+              </button>
+              <button class="template-btn" data-template="historical">
+                <span class="t-icon">📜</span>
+                <span>Pola Historis</span>
+              </button>
+              <button class="template-btn" data-template="compare">
+                <span class="t-icon">⚖</span>
+                <span>Bandingkan Market</span>
+              </button>
+              <button class="template-btn" data-template="weekly-report">
+                <span class="t-icon">📋</span>
+                <span>Weekly Report</span>
+              </button>
+            </div>
+
+            <!-- Risk Tolerance -->
+            <div class="risk-panel">
+              <h4>Risk Tolerance</h4>
+              <div class="risk-slider-wrap">
+                <input type="range" id="riskSlider" min="1" max="5" value="3" class="risk-slider" />
+                <div class="risk-labels">
+                  <span>Konservatif</span>
+                  <span>Agresif</span>
+                </div>
+                <div class="risk-display" id="riskDisplay">Medium Risk</div>
+              </div>
+            </div>
+
+            <!-- Modal Size -->
+            <div class="risk-panel">
+              <h4>Modal (USDC)</h4>
+              <input type="number" id="modalSize" placeholder="1000" class="input-field" value="1000" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== TAB: SENTIMENT ========== -->
+      <section class="tab-panel" id="tab-sentiment">
+        <div class="panel-header">
+          <h2>🧠 Sentiment & News Intelligence</h2>
+          <p class="panel-desc">Analisis sentimen berita, Twitter/X, Reddit, dan forum crypto</p>
+        </div>
+        <div class="sentiment-layout">
+          <div class="input-card">
+            <h3 class="card-title">🔍 Analisis Sentimen Market</h3>
+            <div class="form-group full">
+              <label>Topik / Event yang ingin dianalisis</label>
+              <input type="text" id="sentimentTopic" placeholder="Contoh: Bitcoin ETF approval, US Election 2024, World Cup final..." class="input-field" />
+            </div>
+            <div class="form-group full">
+              <label>Sumber berita atau konteks (opsional)</label>
+              <textarea id="sentimentContext" placeholder="Paste berita, tweet, atau artikel relevan di sini..." class="input-field textarea" rows="4"></textarea>
+            </div>
+            <button class="btn-primary" id="analyzeSentimentBtn">🧠 Analisis Sentimen</button>
+          </div>
+          <div class="result-card" id="sentimentResult" style="display:none;"></div>
+        </div>
+      </section>
+
+      <!-- ========== TAB: ARBITRAGE ========== -->
+      <section class="tab-panel" id="tab-arbitrage">
+        <div class="panel-header">
+          <h2>⚡ Arbitrage & Mispricing Detector</h2>
+          <p class="panel-desc">Deteksi peluang harga salah dan arbitrage antar market</p>
+        </div>
+        <div class="input-card">
+          <h3 class="card-title">⚡ Input Data untuk Deteksi Arbitrage</h3>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>Market A — Judul</label>
+              <input type="text" id="arbMarketA" placeholder="Market pertama..." class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Harga YES Market A (%)</label>
+              <input type="number" id="arbYesA" placeholder="62" class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Harga NO Market A (%)</label>
+              <input type="number" id="arbNoA" placeholder="38" class="input-field" />
+            </div>
+            <div class="form-group full">
+              <label>Market B — Judul (market terkait / correlated)</label>
+              <input type="text" id="arbMarketB" placeholder="Market kedua yang berkorelasi..." class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Harga YES Market B (%)</label>
+              <input type="number" id="arbYesB" placeholder="45" class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Harga NO Market B (%)</label>
+              <input type="number" id="arbNoB" placeholder="55" class="input-field" />
+            </div>
+          </div>
+          <button class="btn-primary" id="detectArbBtn">⚡ Deteksi Arbitrage</button>
+        </div>
+        <div class="result-card" id="arbResult" style="display:none;"></div>
+      </section>
+
+      <!-- ========== TAB: KELLY CRITERION ========== -->
+      <section class="tab-panel" id="tab-kelly">
+        <div class="panel-header">
+          <h2>📊 Kelly Criterion Calculator</h2>
+          <p class="panel-desc">Hitung persentase modal optimal berdasarkan edge dan probabilitas</p>
+        </div>
+        <div class="kelly-layout">
+          <div class="input-card">
+            <h3 class="card-title">📊 Input Data Kelly</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Probabilitas AI (true prob) (%)</label>
+                <input type="number" id="kellyTrueProb" placeholder="70" min="0" max="100" class="input-field" />
+              </div>
+              <div class="form-group">
+                <label>Harga Pasar YES (%)</label>
+                <input type="number" id="kellyMarketProb" placeholder="60" min="0" max="100" class="input-field" />
+              </div>
+              <div class="form-group">
+                <label>Total Modal (USDC)</label>
+                <input type="number" id="kellyBankroll" placeholder="1000" class="input-field" />
+              </div>
+              <div class="form-group">
+                <label>Fraksi Kelly (0.1 - 1.0)</label>
+                <input type="number" id="kellyFraction" placeholder="0.25" min="0.1" max="1" step="0.05" class="input-field" />
+              </div>
+            </div>
+            <button class="btn-primary" id="calcKellyBtn">📊 Hitung Kelly</button>
+          </div>
+          <div class="kelly-result" id="kellyResult" style="display:none;"></div>
+        </div>
+      </section>
+
+      <!-- ========== TAB: BACKTESTING ========== -->
+      <section class="tab-panel" id="tab-backtest">
+        <div class="panel-header">
+          <h2>📈 Backtesting & Performance Tracker</h2>
+          <p class="panel-desc">Simulasi historis dan tracking performa prediksi</p>
+        </div>
+        <div class="input-card">
+          <h3 class="card-title">📝 Log Hasil Prediksi</h3>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>Judul Market</label>
+              <input type="text" id="btMarket" placeholder="Nama market..." class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Prediksi AI (%)</label>
+              <input type="number" id="btPredProb" placeholder="70" class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Harga Entry (%)</label>
+              <input type="number" id="btEntryPrice" placeholder="60" class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Modal di-bet (USDC)</label>
+              <input type="number" id="btAmount" placeholder="100" class="input-field" />
+            </div>
+            <div class="form-group">
+              <label>Hasil Aktual</label>
+              <select id="btOutcome" class="input-field">
+                <option value="">Pilih hasil...</option>
+                <option value="win">✅ WIN (YES)</option>
+                <option value="loss">❌ LOSS (NO)</option>
+                <option value="pending">⏳ Pending</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Kategori</label>
+              <select id="btCategory" class="input-field">
+                <option value="politics">Politik</option>
+                <option value="crypto">Crypto</option>
+                <option value="sports">Olahraga</option>
+                <option value="economy">Ekonomi</option>
+                <option value="other">Lainnya</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-primary" id="logPredBtn">➕ Catat Prediksi</button>
+        </div>
+
+        <div class="backtest-stats" id="backtestStats"></div>
+        <div class="backtest-table-wrap">
+          <table class="backtest-table" id="backtestTable">
+            <thead>
+              <tr>
+                <th>Market</th>
+                <th>Pred AI</th>
+                <th>Entry</th>
+                <th>Edge</th>
+                <th>Amount</th>
+                <th>Hasil</th>
+                <th>P&L</th>
+                <th>Kategori</th>
+              </tr>
+            </thead>
+            <tbody id="backtestBody">
+              <tr class="empty-row"><td colspan="8">Belum ada data. Log prediksi pertama Anda!</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ========== TAB: PORTFOLIO ========== -->
+      <section class="tab-panel" id="tab-portfolio">
+        <div class="panel-header">
+          <h2>💼 Portfolio Simulator</h2>
+          <p class="panel-desc">Simulasi return total berdasarkan prediksi dan modal Anda</p>
+        </div>
+        <div class="input-card">
+          <h3 class="card-title">🤖 AI Portfolio Analysis</h3>
+          <div class="form-group full">
+            <label>Deskripsi portofolio atau strategi Anda</label>
+            <textarea id="portfolioDesc" placeholder="Contoh: Modal 5000 USDC, fokus di market crypto dan politik, risk tolerance medium, target ROI 30% per bulan..." class="input-field textarea" rows="4"></textarea>
+          </div>
+          <button class="btn-primary" id="analyzePortfolioBtn">💼 Analisis Portfolio</button>
+        </div>
+        <div class="result-card" id="portfolioResult" style="display:none;"></div>
+      </section>
+
+      <!-- ========== TAB: HISTORY ========== -->
+      <section class="tab-panel" id="tab-history">
+        <div class="panel-header">
+          <h2>🕒 Riwayat Analisis</h2>
+          <p class="panel-desc">Semua prediksi dan analisis yang telah dilakukan</p>
+        </div>
+        <div class="history-controls">
+          <input type="text" id="historySearch" placeholder="🔍 Cari riwayat..." class="input-field" style="max-width:300px;" />
+          <button class="btn-secondary" id="clearHistoryBtn">🗑 Hapus Semua</button>
+          <button class="btn-secondary" id="exportHistoryBtn">📥 Export JSON</button>
+        </div>
+        <div class="history-list" id="historyList">
+          <div class="empty-state">
+            <div class="empty-icon">🕒</div>
+            <p>Belum ada riwayat analisis.</p>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- end content-area -->
+  </main>
+
+  <!-- MODAL: USER PROFILE EDIT -->
+  <div class="modal-overlay" id="profileModal" style="display:none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>✎ Edit Profile</h3>
+        <button class="modal-close" id="closeProfileModal">✕</button>
+      </div>
+      <div class="form-group">
+        <label>Nama</label>
+        <input type="text" id="editName" placeholder="Nama Anda" class="input-field" />
+      </div>
+      <div class="form-group">
+        <label>Risk Level</label>
+        <select id="editRisk" class="input-field">
+          <option value="very-low">🟢 Very Low</option>
+          <option value="low">🔵 Low</option>
+          <option value="medium" selected>🟡 Medium</option>
+          <option value="high">🟠 High</option>
+          <option value="very-high">🔴 Very High</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Kategori Favorit</label>
+        <select id="editFavCat" class="input-field">
+          <option value="all">Semua Kategori</option>
+          <option value="politics">🗳 Politik</option>
+          <option value="crypto">₿ Crypto</option>
+          <option value="sports">⚽ Olahraga</option>
+          <option value="economy">📉 Ekonomi</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Preferensi Bahasa</label>
+        <select id="editLang" class="input-field">
+          <option value="id">🇮🇩 Bahasa Indonesia</option>
+          <option value="en">🇬🇧 English</option>
+        </select>
+      </div>
+      <button class="btn-primary" id="saveProfileBtn" style="width:100%;margin-top:16px;">💾 Simpan</button>
+    </div>
+  </div>
+
+  <!-- MODAL: MARKET DETAIL -->
+  <div class="modal-overlay" id="marketModal" style="display:none;">
+    <div class="modal modal-wide">
+      <div class="modal-header">
+        <h3 id="modalMarketTitle">Analisis Market</h3>
+        <button class="modal-close" id="closeMarketModal">✕</button>
+      </div>
+      <div id="modalMarketContent"></div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
