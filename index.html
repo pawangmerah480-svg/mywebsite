@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+  <title>Crypto Block Runner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <div id="game-container"></div>
+  <div id="glitch-overlay"></div>
+  <div id="slowmo-overlay"></div>
+  <div id="screen-flash"></div>
+
+  <!-- ═══ HUD ═══ -->
+  <div id="hud" class="hidden">
+    <div id="hud-left">
+      <div class="hud-card">
+        <div class="hud-label">SCORE</div>
+        <div id="score-value" class="hud-num cyan">0</div>
+      </div>
+      <div class="hud-card">
+        <div class="hud-label">BEST</div>
+        <div id="hs-value" class="hud-num pink">0</div>
+      </div>
+      <div class="hud-card" id="skin-card">
+        <div class="hud-label">SKIN</div>
+        <div id="skin-name-hud" class="hud-num" style="font-size:11px;letter-spacing:1px">DEFAULT</div>
+      </div>
+    </div>
+
+    <div id="hud-center">
+      <div id="combo-display" class="hidden">
+        <div id="combo-value">x1</div>
+        <div id="combo-label">COMBO</div>
+      </div>
+      <div id="event-banner" class="hidden">
+        <span id="event-text"></span>
+      </div>
+      <div id="daily-banner" class="hidden">
+        <span id="daily-text"></span>
+      </div>
+    </div>
+
+    <div id="hud-right">
+      <div class="hud-card">
+        <div class="hud-label">⛽ GAS</div>
+        <div id="coins-value" class="hud-num yellow">0</div>
+      </div>
+      <div class="hud-card">
+        <div class="hud-label">DASH</div>
+        <div id="dash-bar-wrap"><div id="dash-bar-fill"></div></div>
+        <div id="dash-status">READY</div>
+      </div>
+      <div class="hud-card" id="daily-hud-card">
+        <div class="hud-label">MISI</div>
+        <div id="daily-hud-bar-wrap"><div id="daily-hud-bar"></div></div>
+        <div id="daily-hud-label" style="font-size:9px;opacity:.5;margin-top:3px"></div>
+      </div>
+    </div>
+
+    <div id="delta-wrap" class="hidden">
+      <div id="delta-text"></div>
+    </div>
+  </div>
+
+  <div id="center-feedback"></div>
+  <div id="milestone-flash" class="hidden"></div>
+
+  <!-- ═══ NAME INPUT SCREEN ═══ -->
+  <div id="name-screen">
+    <div class="screen-inner">
+      <div class="logo-eyebrow">◈ NEON DISTRICT ◈</div>
+      <h1 class="logo-main">CRYPTO<br><span class="logo-accent">BLOCK</span><br>RUNNER</h1>
+      <div class="logo-sub">GAS FEE EDITION — v3.0</div>
+      <div id="name-form">
+        <div class="input-label">MASUKKAN NAMA KAMU</div>
+        <input id="name-input" type="text" maxlength="12" placeholder="NAMA_PLAYER" autocomplete="off" spellcheck="false"/>
+        <button id="name-btn" onclick="submitName()">MULAI ▶</button>
+      </div>
+      <div class="hint-pills" style="margin-top:20px">
+        <span class="pill cyan">⚡ Near Miss → Bonus</span>
+        <span class="pill pink">🐻 Market Crash → x3</span>
+        <span class="pill yellow">🔥 Combo → Trail Neon</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ START SCREEN ═══ -->
+  <div id="start-screen" class="hidden">
+    <div class="screen-inner wide">
+      <div id="start-top">
+        <div id="start-left">
+          <div class="logo-eyebrow">◈ NEON DISTRICT ◈</div>
+          <h1 class="logo-main-sm">CRYPTO<br><span class="logo-accent">BLOCK</span> RUNNER</h1>
+          <div class="logo-sub">GAS FEE EDITION</div>
+
+          <div id="controls-grid">
+            <div class="ctrl-row"><kbd>SPACE</kbd><span>Jump <em>(coyote+buffer)</em></span></div>
+            <div class="ctrl-row"><kbd>SHIFT</kbd><span>Dash — <b class="yellow">5💰</b> gas</span></div>
+            <div class="ctrl-row mobile-only"><span>📱 TAP=Jump · SWIPE=Dash</span></div>
+          </div>
+
+          <div class="hint-pills" style="margin-top:16px">
+            <span class="pill cyan">⚡ Near Miss</span>
+            <span class="pill pink">🐻 Market Crash</span>
+            <span class="pill yellow">🏅 Milestone</span>
+          </div>
+
+          <!-- Daily Challenge -->
+          <div id="daily-card">
+            <div class="hud-label" style="margin-bottom:6px">📅 MISI HARIAN</div>
+            <div id="daily-desc"></div>
+            <div id="daily-prog-wrap"><div id="daily-prog-bar"></div></div>
+            <div id="daily-prog-label"></div>
+          </div>
+
+          <!-- Skin selector -->
+          <div id="skin-panel">
+            <div class="hud-label" style="margin-bottom:8px">🎨 PILIH SKIN</div>
+            <div id="skin-grid"></div>
+          </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div id="start-right">
+          <div class="lb-title">🏆 LEADERBOARD</div>
+          <div id="lb-player-badge"></div>
+          <div id="leaderboard-list"></div>
+        </div>
+      </div>
+
+      <div class="blink-cta" style="margin-top:24px">[ SPACE / TAP TO LAUNCH ]</div>
+    </div>
+  </div>
+
+  <!-- ═══ GAME OVER SCREEN ═══ -->
+  <div id="gameover-screen" class="hidden">
+    <div class="screen-inner">
+      <div id="go-drama">
+        <div id="go-glitch-text">TERMINATED</div>
+      </div>
+
+      <div id="new-record" class="hidden">🏆 NEW RECORD!</div>
+      <div id="daily-complete" class="hidden">✅ MISI HARIAN SELESAI!</div>
+
+      <div id="go-stats">
+        <div class="stat-row"><span class="stat-lbl">PLAYER</span><span id="go-player" class="stat-val cyan"></span></div>
+        <div class="stat-row"><span class="stat-lbl">SCORE</span><span id="go-score"  class="stat-val cyan">0</span></div>
+        <div class="stat-row"><span class="stat-lbl">BEST</span><span id="go-hs"     class="stat-val pink">0</span></div>
+        <div class="stat-row"><span class="stat-lbl">GAS EARNED</span><span id="go-coins" class="stat-val yellow">0</span></div>
+        <div class="stat-row"><span class="stat-lbl">MAX COMBO</span><span id="go-combo"  class="stat-val cyan">x1</span></div>
+        <div class="stat-row"><span class="stat-lbl">TIME</span><span id="go-time"   class="stat-val">0s</span></div>
+      </div>
+
+      <!-- Unlock notification -->
+      <div id="unlock-notif" class="hidden">
+        <div id="unlock-text"></div>
+      </div>
+
+      <div id="go-buttons">
+        <button class="go-btn" id="btn-restart" onclick="startGame()">▶ RESTART</button>
+        <button class="go-btn share-btn" id="btn-share" onclick="shareScore()">📤 BAGIKAN</button>
+        <button class="go-btn lb-btn" onclick="showLB()">🏆 LEADERBOARD</span></button>
+      </div>
+
+      <div id="share-copied" class="hidden">✅ Teks tersalin! Paste ke WA/IG</div>
+    </div>
+  </div>
+
+  <!-- ═══ LEADERBOARD MODAL ═══ -->
+  <div id="lb-modal" class="hidden">
+    <div class="modal-inner">
+      <div class="modal-title">🏆 LEADERBOARD</div>
+      <div id="lb-modal-list"></div>
+      <button class="go-btn" style="margin-top:18px" onclick="closeLB()">✕ TUTUP</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
