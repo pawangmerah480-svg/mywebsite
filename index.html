@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+    content="NyxFF Market - Marketplace jual beli akun Free Fire terpercaya. Akun Sultan, Diamond, Bundle Limited, Skin Senjata Legendary. Transaksi aman & cepat.">
+    <meta name="keywords"
+    content="jual beli akun free fire, akun ff sultan, akun ff murah, marketplace akun ff, akun free fire, diamond ff, top up ff">
+    <meta name="author" content="NyxFF Market">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="NyxFF Market - Marketplace Akun Free Fire #1">
+    <meta property="og:description"
+    content="Beli akun Free Fire impianmu dengan harga terbaik. Akun Sultan, Bundle Limited, Skin Legendary tersedia.">
+    <meta property="og:image" content="https://i.imgur.com/placeholder-ff.jpg">
+    <meta property="og:url" content="https://nyxffmarket.vercel.app">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="canonical" href="https://nyxffmarket.vercel.app">
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "NyxFF Market",
+            "url": "https://nyxffmarket.vercel.app",
+            "description": "Marketplace jual beli akun Free Fire terpercaya"
+        }
+    </script>
+    <title>NyxFF Market 🔥 Marketplace Akun Free Fire #1 | Jual Beli Akun FF Sultan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <span class="logo-text-load">NYX<span class="ff-glow">FF</span></span>
+                <span class="logo-sub">MARKET</span>
+            </div>
+            <div class="loading-bar-container">
+                <div class="loading-bar"></div>
+            </div>
+            <p class="loading-tip" id="loadingTip">Memuat akun-akun terbaik...</p>
+        </div>
+    </div>
+
+    <div id="particleCanvas" class="particle-bg"></div>
+    <div class="glow-orb glow-orb-1"></div>
+    <div class="glow-orb glow-orb-2"></div>
+    <div class="glow-orb glow-orb-3"></div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" onclick="navigateTo('home')">
+                <span class="logo-icon"><i class="fas fa-fire"></i></span>
+                NYX<span class="ff-text">FF</span>
+                <span class="logo-dot">.</span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#home" class="nav-link active" data-page="home"><i class="fas fa-home"></i> Home</a>
+                <a href="#marketplace" class="nav-link" data-page="marketplace"><i class="fas fa-store"></i> Marketplace</a>
+                <a href="#testimoni" class="nav-link" data-page="testimoni"><i class="fas fa-star"></i> Testimoni</a>
+                <a href="#faq" class="nav-link" data-page="faq"><i class="fas fa-question-circle"></i> FAQ</a>
+                <a href="#kontak" class="nav-link" data-page="kontak"><i class="fas fa-envelope"></i> Kontak</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-icon nav-cart-btn" id="cartBtn" title="Keranjang">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+                <button class="btn-icon theme-toggle" id="themeToggle" title="Mode Terang/Gelap">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="btn-icon nav-wishlist-btn" id="wishlistBtn" title="Wishlist">
+                    <i class="fas fa-heart"></i>
+                    <span class="wishlist-badge" id="wishlistBadge">0</span>
+                </button>
+                <button class="btn-login" id="loginBtn" onclick="openLoginModal()">
+                    <i class="fas fa-user"></i> <span>Login</span>
+                </button>
+                <button class="btn-hamburger" id="hamburgerBtn" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#home" class="mobile-link active" data-page="home"><i class="fas fa-home"></i> Home</a>
+        <a href="#marketplace" class="mobile-link" data-page="marketplace"><i class="fas fa-store"></i> Marketplace</a>
+        <a href="#testimoni" class="mobile-link" data-page="testimoni"><i class="fas fa-star"></i> Testimoni</a>
+        <a href="#faq" class="mobile-link" data-page="faq"><i class="fas fa-question-circle"></i> FAQ</a>
+        <a href="#kontak" class="mobile-link" data-page="kontak"><i class="fas fa-envelope"></i> Kontak</a>
+    </div>
+
+    <div class="promo-banner" id="promoBanner">
+        <div class="promo-scroll">
+            <span>🔥 FLASH SALE! Diskon 30% akun Sultan! Kode: <strong>NYXFF30</strong></span>
+            <span class="promo-separator">|</span>
+            <span>⚡ Top Up Diamond Murah mulai Rp10.000</span>
+            <span class="promo-separator">|</span>
+            <span>🎁 Lucky Spin Gratis setiap pembelian di atas Rp500rb</span>
+            <span class="promo-separator">|</span>
+            <span>🔥 FLASH SALE! Diskon 30% akun Sultan! Kode: <strong>NYXFF30</strong></span>
+            <span class="promo-separator">|</span>
+            <span>⚡ Top Up Diamond Murah mulai Rp10.000</span>
+        </div>
+    </div>
+
+    <div class="countdown-bar" id="countdownBar">
+        <div class="countdown-inner">
+            <i class="fas fa-clock"></i>
+            <span>Promo berakhir dalam:</span>
+            <span class="countdown-timer" id="countdownTimer">23:59:59</span>
+        </div>
+    </div>
+
+    <main id="mainContent">
+        <!-- HOME PAGE -->
+        <section id="home-page" class="page-section active">
+            <section class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="pulse-dot"></span> #1 Marketplace Akun FF 2024
+                    </div>
+                    <h1 class="hero-title">
+                        TEMUKAN AKUN <span class="hero-highlight">FREE FIRE</span><br>IMPIANMU
+                    </h1>
+                    <p class="hero-subtitle">
+                        Akun Sultan • Bundle Limited • Skin Legendary • Diamond Murah<br>
+                        <span class="hero-stats-text">🔥 <span id="totalSold">1,247</span>+ Akun Terjual • ⭐ 4.9 Rating</span>
+                    </p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary btn-glow" onclick="navigateTo('marketplace')">
+                            <i class="fas fa-bolt"></i> Lihat Marketplace
+                        </button>
+                        <button class="btn-outline" onclick="openWhatsApp('admin', 'Halo admin NyxFF, saya tertarik dengan akun FF!')">
+                            <i class="fab fa-whatsapp"></i> Chat Admin
+                        </button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="1247">0</span>
+                            <span class="stat-label">Akun Terjual</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="486">0</span>
+                            <span class="stat-label">Akun Tersedia</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-count="98">0</span>
+                            <span class="stat-label">% Kepuasan</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-card-float">
+                        <div class="hero-card-glow"></div>
+                        <div class="hero-card-inner">
+                            <img src="https://i.imgur.com/8Km9tTN.png" alt="FF Character" class="hero-char-img"
+                            onerror="this.style.display='none';this.parentElement.innerHTML='<div class=hero-char-placeholder><i class=\'fas fa-gamepad\'></i><span>FREE FIRE</span></div>';">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="featured-section">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-fire"></i> Akun <span class="text-glow">Hot</span> Minggu
+                        Ini</h2>
+                    <button class="btn-link" onclick="navigateTo('marketplace')">Lihat Semua <i
+                            class="fas fa-arrow-right"></i></button>
+                </div>
+                <div class="accounts-grid" id="featuredAccounts"></div>
+            </section>
+
+            <section class="categories-section">
+                <h2 class="section-title center"><i class="fas fa-layer-group"></i> Kategori Akun</h2>
+                <div class="categories-grid">
+                    <div class="category-card" onclick="filterByCategory('sultan')">
+                        <i class="fas fa-crown cat-icon"></i>
+                        <span>Sultan</span>
+                        <small>Akun Premium</small>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('diamond')">
+                        <i class="fas fa-gem cat-icon"></i>
+                        <span>Diamond</span>
+                        <small>DD Banyak</small>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('bundle')">
+                        <i class="fas fa-tshirt cat-icon"></i>
+                        <span>Bundle</span>
+                        <small>Skin Limited</small>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('senjata')">
+                        <i class="fas fa-gun cat-icon"></i>
+                        <span>Senjata</span>
+                        <small>Skin Legend</small>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('murah')">
+                        <i class="fas fa-tag cat-icon"></i>
+                        <span>Murah</span>
+                        <small>Harga Hemat</small>
+                    </div>
+                    <div class="category-card" onclick="filterByCategory('new')">
+                        <i class="fas fa-star cat-icon"></i>
+                        <span>New</span>
+                        <small>Baru Masuk</small>
+                    </div>
+                </div>
+            </section>
+
+            <section class="testimonial-preview">
+                <h2 class="section-title center"><i class="fas fa-heart"></i> Testimoni Pembeli</h2>
+                <div class="testimonial-slider" id="testimonialSlider"></div>
+            </section>
+        </section>
+
+        <!-- MARKETPLACE PAGE -->
+        <section id="marketplace-page" class="page-section">
+            <div class="marketplace-header">
+                <h2><i class="fas fa-store"></i> Marketplace Akun FF</h2>
+                <p>Temukan akun Free Fire impianmu dengan harga terbaik</p>
+            </div>
+            <div class="filter-bar">
+                <div class="filter-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Cari akun... (rank, level, bundle, dll)">
+                </div>
+                <div class="filter-options">
+                    <select id="filterRank">
+                        <option value="">Semua Rank</option>
+                        <option value="Bronze">Bronze</option>
+                        <option value="Silver">Silver</option>
+                        <option value="Gold">Gold</option>
+                        <option value="Platinum">Platinum</option>
+                        <option value="Diamond">Diamond</option>
+                        <option value="Heroic">Heroic</option>
+                        <option value="Grandmaster">Grandmaster</option>
+                    </select>
+                    <select id="filterLogin">
+                        <option value="">Login Method</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="Google">Google</option>
+                        <option value="VK">VK</option>
+                        <option value="Twitter">Twitter</option>
+                        <option value="Apple">Apple ID</option>
+                    </select>
+                    <select id="filterKategori">
+                        <option value="">Kategori</option>
+                        <option value="sultan">Sultan</option>
+                        <option value="diamond">Diamond</option>
+                        <option value="bundle">Bundle</option>
+                        <option value="senjata">Senjata</option>
+                        <option value="murah">Murah</option>
+                        <option value="new">New</option>
+                    </select>
+                    <select id="filterHarga">
+                        <option value="">Harga</option>
+                        <option value="0-100000">Di bawah Rp100rb</option>
+                        <option value="100000-300000">Rp100rb - Rp300rb</option>
+                        <option value="300000-500000">Rp300rb - Rp500rb</option>
+                        <option value="500000-1000000">Rp500rb - Rp1jt</option>
+                        <option value="1000000-999999999">Di atas Rp1jt</option>
+                    </select>
+                    <select id="filterStatus">
+                        <option value="">Status</option>
+                        <option value="available">Available</option>
+                        <option value="promo">Promo</option>
+                        <option value="booking">Booking</option>
+                    </select>
+                    <button class="btn-filter-reset" onclick="resetFilters()">
+                        <i class="fas fa-rotate"></i> Reset
+                    </button>
+                </div>
+                <div class="filter-active-tags" id="activeFilterTags"></div>
+            </div>
+            <div class="marketplace-stats">
+                <span><i class="fas fa-box"></i> Menampilkan <strong id="displayedCount">0</strong> akun</span>
+                <span><i class="fas fa-circle-check" style="color:#00ff88;"></i> <strong id="availableCount">0</strong>
+                    tersedia</span>
+            </div>
+            <div class="accounts-grid" id="allAccountsGrid"></div>
+            <div class="pagination" id="pagination"></div>
+        </section>
+
+        <!-- DETAIL PAGE -->
+        <section id="detail-page" class="page-section">
+            <div id="detailContent"></div>
+        </section>
+
+        <!-- TESTIMONI PAGE -->
+        <section id="testimoni-page" class="page-section">
+            <h2 class="section-title center"><i class="fas fa-star"></i> Testimoni Pembeli</h2>
+            <div class="testimonial-grid" id="testimonialGrid"></div>
+        </section>
+
+        <!-- FAQ PAGE -->
+        <section id="faq-page" class="page-section">
+            <h2 class="section-title center"><i class="fas fa-question-circle"></i> FAQ</h2>
+            <div class="faq-list" id="faqList"></div>
+        </section>
+
+        <!-- KONTAK PAGE -->
+        <section id="kontak-page" class="page-section">
+            <h2 class="section-title center"><i class="fas fa-envelope"></i> Hubungi Kami</h2>
+            <div class="contact-grid">
+                <div class="contact-card" onclick="openWhatsApp('admin','Halo admin NyxFF Market!')">
+                    <i class="fab fa-whatsapp"></i>
+                    <h3>WhatsApp</h3>
+                    <p>Chat cepat & responsif</p>
+                    <span>+62 812-3456-7890</span>
+                </div>
+                <div class="contact-card"
+                onclick="window.open('https://tiktok.com/@nyxffmarket','_blank')">
+                <i class="fab fa-tiktok"></i>
+                <h3>TikTok</h3>
+                <p>Konten & review akun</p>
+                <span>@nyxffmarket</span>
+            </div>
+            <div class="contact-card"
+            onclick="window.open('https://instagram.com/nyxffmarket','_blank')">
+            <i class="fab fa-instagram"></i>
+            <h3>Instagram</h3>
+            <p>Info stok terbaru</p>
+            <span>@nyxffmarket</span>
+        </div>
+        <div class="contact-card"
+        onclick="window.open('https://t.me/nyxffmarket','_blank')">
+        <i class="fab fa-telegram"></i>
+        <h3>Telegram</h3>
+        <p>Grup komunitas</p>
+        <span>t.me/nyxffmarket</span>
+    </div>
+</div>
+</section>
+
+<!-- CHECKOUT PAGE -->
+<section id="checkout-page" class="page-section">
+    <div id="checkoutContent"></div>
+</section>
+</main>
+
+<!-- MODAL: Login -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal">
+        <button class="modal-close" onclick="closeLoginModal()">&times;</button>
+        <h2 class="modal-title"><i class="fas fa-sign-in-alt"></i> Login ke NyxFF Market</h2>
+        <div class="modal-body">
+            <button class="btn-social btn-google" onclick="loginWithGoogle()">
+                <i class="fab fa-google"></i> Login dengan Google
+            </button>
+            <button class="btn-social btn-discord" onclick="loginWithDiscord()">
+                <i class="fab fa-discord"></i> Login dengan Discord
+            </button>
+            <div class="modal-divider"><span>atau</span></div>
+            <p class="modal-note">Login untuk menyimpan wishlist dan riwayat pembelian</p>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Cart -->
+<div class="modal-overlay" id="cartModal">
+    <div class="modal modal-cart">
+        <button class="modal-close" onclick="closeCartModal()">&times;</button>
+        <h2 class="modal-title"><i class="fas fa-shopping-cart"></i> Keranjang Belanja</h2>
+        <div class="modal-body" id="cartItems"></div>
+        <div class="cart-footer" id="cartFooter" style="display:none;">
+            <div class="cart-total">
+                <span>Total:</span>
+                <strong id="cartTotal">Rp0</strong>
+            </div>
+            <button class="btn-primary btn-glow" onclick="checkoutCart()">
+                <i class="fas fa-credit-card"></i> Checkout Sekarang
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: Lucky Spin -->
+<div class="modal-overlay" id="luckySpinModal">
+    <div class="modal modal-spin">
+        <button class="modal-close" onclick="closeLuckySpin()">&times;</button>
+        <h2 class="modal-title"><i class="fas fa-dice"></i> Lucky Spin Diskon!</h2>
+        <div class="spin-wheel-container">
+            <div class="spin-wheel" id="spinWheel">
+                <div class="spin-segment" style="--i:0;">10%</div>
+                <div class="spin-segment" style="--i:1;">20%</div>
+                <div class="spin-segmen
