@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Bookmark Ayat | Al-Qur'an Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="animated-bg">
+    <div class="aurora"></div>
+    <div class="moon"></div>
+    <div class="geometric-overlay"></div>
+  </div>
+
+  <nav class="navbar glass" id="navbar">
+    <div class="nav-container">
+      <div class="logo"><i class="fas fa-quran"></i><span>Al-Qur'an</span></div>
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+        <button class="icon-btn" id="backHome"><i class="fas fa-home"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="bookmark-container">
+    <div class="section-header">
+      <h2><i class="fas fa-bookmark"></i> Bookmark Ayat</h2>
+      <div class="search-mini">
+        <i class="fas fa-search"></i>
+        <input type="text" id="filterBookmark" placeholder="Cari bookmark..." class="glass-input">
+      </div>
+    </div>
+    <div class="bookmark-list" id="bookmarkList">
+      <div class="skeleton-loader"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.onclick = () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    };
+    document.getElementById('backHome').onclick = () => window.location.href = 'index.html';
+
+    // Load and render bookmarks
+    function renderBookmarks(filter = '') {
+      const container = document.getElementById('bookmarkList');
+      let bookmarks = JSON.parse(localStorage.getItem('quran_bookmarks') || '[]');
+      if (filter) {
+        bookmarks = bookmarks.filter(b => 
+          b.surahName?.toLowerCase().includes(filter.toLowerCase()) || 
+          b.ayat.toString().includes(filter)
+        );
+      }
+      if (bookmarks.length === 0) {
+        container.innerHTML = '<div class="empty-state glass">Belum ada bookmark. Tambahkan dari detail surah.</div>';
+        return;
+      }
+      container.innerHTML = bookmarks.map((bm, idx) => `
+        <div class="bookmark-item glass fade-up">
+          <div class="bookmark-info">
+            <div class="bookmark-title">${bm.surahName || `Surah ${bm.surah}`} : Ayat ${bm.ayat}</div>
+            <div class="bookmark-arabic">${bm.arab ? bm.arab.substring(0, 60) + '…' : ''}</div>
+            <div class="bookmark-translation">${bm.translation ? bm.translation.substring(0, 80) + '…' : ''}</div>
+          </div>
+          <div class="bookmark-actions">
+            <button class="icon-btn read-bookmark" data-surah="${bm.surah}" data-ayat="${bm.ayat}"><i class="fas fa-book-open"></i></button>
+            <button class="icon-btn delete-bookmark" data-idx="${idx}"><i class="fas fa-trash-alt"></i></button>
+            <button class="icon-btn share-bookmark" data-surah="${bm.surah}" data-ayat="${bm.ayat}"><i class="fas fa-share-alt"></i></button>
+          </div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.read-bookmark').forEach(btn => {
+        btn.onclick = () => window.location.href = `surah.html?surah=${btn.dataset.surah}#ayat-${btn.dataset.ayat}`;
+      });
+      document.querySelectorAll('.delete-bookmark').forEach(btn => {
+        btn.onclick = () => {
+          let bm = JSON.parse(localStorage.getItem('quran_bookmarks') || '[]');
+          bm.splice(parseInt(btn.dataset.idx), 1);
+          localStorage.setItem('quran_bookmarks', JSON.stringify(bm));
+          renderBookmarks(document.getElementById('filterBookmark')?.value || '');
+          showNotification('Bookmark dihapus');
+        };
+      });
+      document.querySelectorAll('.share-bookmark').forEach(btn => {
+        btn.onclick = () => {
+          if (navigator.share) navigator.share({ title: 'Ayat Qur\'an', text: `Surah ${btn.dataset.surah} Ayat ${btn.dataset.ayat}` });
+          else alert('Share tidak didukung');
+        };
+      });
+    }
+
+    document.getElementById('filterBookmark').addEventListener('input', (e) => {
+      renderBookmarks(e.target.value);
+    });
+    renderBookmarks();
+  </script>
+</body>
+</html>
