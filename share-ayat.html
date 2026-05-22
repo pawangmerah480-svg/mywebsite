@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Share Ayat Aesthetic | Al-Qur'an Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="animated-bg">
+    <div class="aurora"></div>
+    <div class="moon"></div>
+    <div class="geometric-overlay"></div>
+  </div>
+
+  <nav class="navbar glass">
+    <div class="nav-container">
+      <div class="logo"><i class="fas fa-quran"></i><span>Al-Qur'an</span></div>
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+        <button class="icon-btn" id="backHome"><i class="fas fa-home"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="share-container">
+    <h2><i class="fas fa-share-alt"></i> Bagikan Ayat Aesthetic</h2>
+    <div class="share-editor">
+      <div class="preview-card" id="previewCard">
+        <div class="preview-bg" id="previewBg"></div>
+        <div class="preview-content">
+          <div class="preview-arabic" id="previewArabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+          <div class="preview-translation" id="previewTranslation">Dengan nama Allah Yang Maha Pengasih, Maha Penyayang</div>
+          <div class="preview-footer" id="previewFooter">— Al-Qur'an Premium —</div>
+        </div>
+      </div>
+
+      <div class="share-controls glass">
+        <div class="input-group">
+          <input type="number" id="surahInput" placeholder="Nomor Surah (1-114)" class="glass-input">
+          <input type="number" id="ayatInput" placeholder="Nomor Ayat" class="glass-input">
+          <button id="loadAyatBtn" class="btn-primary">Muat Ayat</button>
+        </div>
+        <div class="input-group">
+          <select id="bgTheme" class="glass-input">
+            <option value="gradient1">🌿 Gradient Hijau</option>
+            <option value="gradient2">💎 Gradient Biru</option>
+            <option value="gradient3">✨ Gradient Emas</option>
+            <option value="gradient4">🌙 Gradient Malam</option>
+            <option value="solid">⚫ Solid AMOLED</option>
+          </select>
+          <select id="fontStyle" class="glass-input">
+            <option value="default">Font Standar</option>
+            <option value="large">Arab Lebih Besar</option>
+            <option value="elegant">Elegant Spacing</option>
+          </select>
+        </div>
+        <div class="action-buttons">
+          <button id="downloadBtn" class="btn-primary"><i class="fas fa-download"></i> Download PNG</button>
+          <button id="shareWhatsapp" class="btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+          <button id="shareInstagram" class="btn-secondary"><i class="fab fa-instagram"></i> Instagram</button>
+          <button id="shareFacebook" class="btn-secondary"><i class="fab fa-facebook"></i> Facebook</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.onclick = () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    };
+    document.getElementById('backHome').onclick = () => window.location.href = 'index.html';
+
+    async function loadAyat(surah, ayat) {
+      try {
+        const data = await fetchSurahDetail(surah);
+        const verse = data.verses.find(v => v.number.inSurah == ayat);
+        if (verse) {
+          document.getElementById("previewArabic").innerText = verse.text.arab;
+          document.getElementById("previewTranslation").innerText = verse.translation.id;
+          document.getElementById("previewFooter").innerHTML = `— ${data.name.transliteration.id}, Ayat ${ayat} —<br>Al-Qur'an Premium`;
+        } else {
+          alert("Ayat tidak ditemukan");
+        }
+      } catch (e) {
+        alert("Error memuat ayat");
+      }
+    }
+
+    function applyTheme(theme) {
+      const preview = document.getElementById('previewCard');
+      const bg = document.getElementById('previewBg');
+      let gradient = '';
+      switch(theme) {
+        case 'gradient1':
+          gradient = 'linear-gradient(145deg, #0a2e1f, #051a0f)';
+          break;
+        case 'gradient2':
+          gradient = 'linear-gradient(145deg, #0a1f3e, #030b1a)';
+          break;
+        case 'gradient3':
+          gradient = 'linear-gradient(145deg, #3e2a0a, #1a0f03)';
+          break;
+        case 'gradient4':
+          gradient = 'linear-gradient(145deg, #0f0c29, #1a1a2e)';
+          break;
+        default:
+          gradient = '#050505';
+      }
+      bg.style.background = gradient;
+    }
+
+    function applyFont(style) {
+      const arabicEl = document.getElementById('previewArabic');
+      const transEl = document.getElementById('previewTranslation');
+      if (style === 'large') {
+        arabicEl.style.fontSize = '2rem';
+        transEl.style.fontSize = '0.9rem';
+      } else if (style === 'elegant') {
+        arabicEl.style.fontSize = '1.6rem';
+        arabicEl.style.lineHeight = '2.2';
+        transEl.style.letterSpacing = '0.5px';
+      } else {
+        arabicEl.style.fontSize = '1.5rem';
+        arabicEl.style.lineHeight = '1.6';
+        transEl.style.letterSpacing = 'normal';
+      }
+    }
+
+    document.getElementById('loadAyatBtn').onclick = () => {
+      const s = parseInt(document.getElementById('surahInput').value);
+      const a = parseInt(document.getElementById('ayatInput').value);
+      if (s && a && s >= 1 && s <= 114) loadAyat(s, a);
+      else alert("Masukkan nomor surah (1-114) dan ayat yang valid");
+    };
+
+    document.getElementById('bgTheme').addEventListener('change', (e) => applyTheme(e.target.value));
+    document.getElementById('fontStyle').addEventListener('change', (e) => applyFont(e.target.value));
+
+    document.getElementById('downloadBtn').onclick = () => {
+      html2canvas(document.getElementById('previewCard'), { scale: 2, backgroundColor: null }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'ayat-share.png';
+        link.href = canvas.toDataURL();
+        link.click();
+        showNotification('Gambar berhasil diunduh');
+      });
+    };
+
+    document.getElementById('shareWhatsapp').onclick = async () => {
+      const canvas = await html2canvas(document.getElementById('previewCard'), { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = imgData;
+      link.download = 'temp.png';
+      link.click();
+      setTimeout(() => {
+        const text = encodeURIComponent(document.getElementById("previewTranslation").innerText);
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+      }, 500);
+    };
+
+    document.getElementById('shareInstagram').onclick = () => {
+      alert("Screenshot gambar lalu upload ke Instagram Story atau Feed");
+    };
+    document.getElementById('shareFacebook').onclick = () => {
+      alert("Unduh gambar lalu bagikan ke Facebook");
+    };
+
+    // Default tampilan
+    applyTheme('gradient1');
+    applyFont('default');
+    loadAyat(1, 1);
+  </script>
+</body>
+</html>
