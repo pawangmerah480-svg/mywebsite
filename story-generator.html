@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Story Generator | Al-Qur'an Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="animated-bg">
+    <div class="aurora"></div>
+    <div class="moon"></div>
+    <div class="geometric-overlay"></div>
+  </div>
+
+  <nav class="navbar glass">
+    <div class="nav-container">
+      <div class="logo"><i class="fas fa-quran"></i><span>Al-Qur'an</span></div>
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+        <button class="icon-btn" id="backHome"><i class="fas fa-home"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="story-generator">
+    <h2><i class="fas fa-magic"></i> Generator Story Aesthetic</h2>
+    <div class="story-editor">
+      <div class="story-preview" id="storyPreview">
+        <div class="story-bg" id="storyBg"></div>
+        <div class="story-content">
+          <div class="story-arabic" id="storyArabic">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+          <div class="story-translation" id="storyTranslation">Dengan nama Allah Yang Maha Pengasih, Maha Penyayang</div>
+          <div class="story-footer" id="storyFooter">— Al-Qur'an Premium —</div>
+        </div>
+      </div>
+      <div class="story-controls glass">
+        <input type="number" id="storySurah" placeholder="Nomor Surah" class="glass-input">
+        <input type="number" id="storyAyat" placeholder="Nomor Ayat" class="glass-input">
+        <button id="loadStoryAyat" class="btn-primary">Muat Ayat</button>
+        <select id="storyTemplate" class="glass-input">
+          <option value="dark">Dark Emerald</option>
+          <option value="gold">Gold Luxury</option>
+          <option value="neon">Neon Islamic</option>
+          <option value="white">Minimal White</option>
+          <option value="royal">Royal Blue</option>
+        </select>
+        <button id="downloadStoryBtn" class="btn-primary"><i class="fas fa-download"></i> Download PNG</button>
+        <div class="social-story">
+          <button class="share-wa-story btn-secondary"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+          <button class="share-ig-story btn-secondary"><i class="fab fa-instagram"></i> IG Story</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.onclick = () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    };
+    document.getElementById('backHome').onclick = () => window.location.href = 'index.html';
+
+    async function loadStoryAyat(surah, ayat) {
+      const data = await fetchSurahDetail(surah);
+      const verse = data.verses.find(v => v.number.inSurah == ayat);
+      if (verse) {
+        document.getElementById("storyArabic").innerText = verse.text.arab;
+        document.getElementById("storyTranslation").innerText = verse.translation.id;
+        document.getElementById("storyFooter").innerHTML = `— ${data.name.transliteration.id}, Ayat ${ayat} —<br>Al-Qur'an Premium`;
+      } else {
+        alert("Ayat tidak ditemukan");
+      }
+    }
+
+    document.getElementById("loadStoryAyat").onclick = () => {
+      const s = parseInt(document.getElementById("storySurah").value);
+      const a = parseInt(document.getElementById("storyAyat").value);
+      if (s && a) loadStoryAyat(s, a);
+    };
+
+    function applyTemplate(template) {
+      const preview = document.getElementById("storyPreview");
+      preview.className = `story-preview template-${template}`;
+    }
+    document.getElementById("storyTemplate").addEventListener("change", (e) => applyTemplate(e.target.value));
+
+    document.getElementById("downloadStoryBtn").onclick = () => {
+      html2canvas(document.getElementById("storyPreview"), { scale: 2, backgroundColor: null }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'story-ayat.png';
+        link.href = canvas.toDataURL();
+        link.click();
+        showNotification('Gambar berhasil diunduh');
+      });
+    };
+
+    document.querySelector(".share-wa-story").onclick = () => {
+      const text = encodeURIComponent(document.getElementById("storyTranslation").innerText);
+      window.open(`https://wa.me/?text=${text}`, '_blank');
+    };
+    document.querySelector(".share-ig-story").onclick = () => {
+      alert("Screenshot gambar lalu upload ke Instagram Story");
+    };
+
+    applyTemplate("dark");
+  </script>
+</body>
+</html>
