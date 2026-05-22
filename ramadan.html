@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Ramadan System | Al-Qur'an Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="animated-bg">
+    <div class="aurora"></div>
+    <div class="moon"></div>
+    <div class="geometric-overlay"></div>
+  </div>
+
+  <nav class="navbar glass">
+    <div class="nav-container">
+      <div class="logo"><i class="fas fa-quran"></i><span>Al-Qur'an</span></div>
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+        <button class="icon-btn" id="backHome"><i class="fas fa-home"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="ramadan-dashboard">
+    <div class="ramadan-header glass">
+      <h1><i class="fas fa-moon"></i> Ramadan 1446 H</h1>
+      <div class="countdown-iftar" id="iftarCountdown">Menuju Buka Puasa: --:--:--</div>
+    </div>
+    <div class="stats-ramadan glass">
+      <div class="stat"><span>📆 Hari Ramadan ke-</span><span id="ramadanDay">1</span></div>
+      <div class="stat"><span>📖 Total Ayat Dibaca</span><span id="totalRamadanAyat">0</span></div>
+      <div class="stat"><span>🎯 Target Khatam</span><span id="khatamTarget">30 Juz</span></div>
+      <div class="stat"><span>🔥 Streak Ibadah</span><span id="ramadanStreak">0</span></div>
+    </div>
+    <div class="daily-challenge glass">
+      <h3>📖 Challenge Hari Ini</h3>
+      <p id="dailyChallenge">Baca Juz 1</p>
+      <button id="markComplete" class="btn-primary">Tandai Selesai</button>
+    </div>
+    <div class="leaderboard glass">
+      <h3>🏆 Leaderboard (Teman)</h3>
+      <ul id="leaderboardList"><li>1. Anda - 0 ayat</li></ul>
+    </div>
+    <div class="ramadan-calendar" id="ramadanCalendar"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.onclick = () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    };
+    document.getElementById('backHome').onclick = () => window.location.href = 'index.html';
+
+    let ramadanData = JSON.parse(localStorage.getItem("ramadan2026")) || { 
+      day: 1, 
+      totalAyat: 0, 
+      streak: 0, 
+      completedDays: [] 
+    };
+    // Tanggal mulai Ramadan (contoh: 1 Maret 2026)
+    const ramadanStart = new Date(2026, 2, 1);
+
+    function updateRamadan() {
+      const now = new Date();
+      const diffDays = Math.floor((now - ramadanStart) / (1000*60*60*24)) + 1;
+      const ramadanDay = Math.min(diffDays, 30);
+      document.getElementById("ramadanDay").innerText = ramadanDay > 0 ? ramadanDay : 1;
+      document.getElementById("totalRamadanAyat").innerText = ramadanData.totalAyat;
+      document.getElementById("ramadanStreak").innerText = ramadanData.streak;
+      
+      // Iftar countdown (Maghrib default 18:00)
+      const iftar = new Date();
+      iftar.setHours(18, 0, 0, 0);
+      const diff = iftar - now;
+      if (diff > 0) {
+        const hours = Math.floor(diff/3600000);
+        const mins = Math.floor((diff%3600000)/60000);
+        const secs = Math.floor((diff%60000)/1000);
+        document.getElementById("iftarCountdown").innerHTML = `Menuju Buka Puasa: ${hours}h ${mins}m ${secs}s`;
+      } else {
+        document.getElementById("iftarCountdown").innerHTML = "✨ Waktu berbuka puasa telah tiba ✨";
+      }
+    }
+
+    function updateCalendar() {
+      const container = document.getElementById("ramadanCalendar");
+      let html = '<div class="calendar-grid">';
+      for (let i = 1; i <= 30; i++) {
+        const completed = ramadanData.completedDays.includes(i);
+        html += `<div class="calendar-day ${completed ? 'completed' : ''}">${i}</div>`;
+      }
+      html += '</div>';
+      container.innerHTML = html;
+    }
+
+    function updateLeaderboard() {
+      const list = document.getElementById("leaderboardList");
+      // Simulasi leaderboard
+      list.innerHTML = `
+        <li>1. Anda - ${ramadanData.totalAyat} ayat</li>
+        <li>2. Abu Bakar - 450 ayat</li>
+        <li>3. Aisyah - 320 ayat</li>
+      `;
+    }
+
+    document.getElementById("markComplete").onclick = () => {
+      const today = parseInt(document.getElementById("ramadanDay").innerText);
+      if (!ramadanData.completedDays.includes(today)) {
+        ramadanData.completedDays.push(today);
+        ramadanData.streak++;
+        ramadanData.totalAyat += 20; // asumsi baca 20 ayat per hari
+        localStorage.setItem("ramadan2026", JSON.stringify(ramadanData));
+        updateRamadan();
+        updateCalendar();
+        updateLeaderboard();
+        showNotification("Alhamdulillah! Challenge selesai. +20 ayat");
+      } else {
+        showNotification("Hari ini sudah ditandai selesai");
+      }
+    };
+
+    updateRamadan();
+    updateCalendar();
+    updateLeaderboard();
+    setInterval(updateRamadan, 1000);
+  </script>
+</body>
+</html>
