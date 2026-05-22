@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
+  <meta name="theme-color" content="#10b981">
+  <meta name="description" content="Al-Qur'an Premium 2026 - Baca Al-Qur'an dengan pengalaman modern, elegan, dan futuristik. Dilengkapi AI, audio, jadwal sholat, dan fitur canggih lainnya.">
+  <title>Al-Qur'an Premium 2026 | Baca dengan Nyaman</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Animated Islamic Background -->
+  <div class="animated-bg">
+    <div class="aurora"></div>
+    <div class="moon"></div>
+    <div class="geometric-overlay"></div>
+  </div>
+
+  <!-- Premium Navbar -->
+  <nav class="navbar glass" id="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <i class="fas fa-quran"></i>
+        <span>Al-Qur'an</span>
+      </div>
+      <div class="nav-actions">
+        <button class="icon-btn search-toggle" id="searchToggle" aria-label="Search">
+          <i class="fas fa-search"></i>
+        </button>
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Theme">
+          <i class="fas fa-moon"></i>
+        </button>
+        <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menu">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    <!-- Search Bar Premium -->
+    <div class="search-bar-container" id="searchBar">
+      <div class="search-wrapper glass">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="Cari surah, arti, atau nomor..." autocomplete="off">
+        <button id="clearSearch" class="clear-search"><i class="fas fa-times-circle"></i></button>
+      </div>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </nav>
+
+  <!-- Sidebar Mobile Premium -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="sidebar glass" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo"><i class="fas fa-quran"></i><span>Menu</span></div>
+      <button class="icon-btn close-sidebar" id="closeSidebar"><i class="fas fa-times"></i></button>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="index.html" class="active"><i class="fas fa-home"></i> Beranda</a></li>
+      <li><a href="surah.html"><i class="fas fa-book"></i> Surah</a></li>
+      <li><a href="juz.html"><i class="fas fa-layer-group"></i> Juz</a></li>
+      <li><a href="bookmark.html"><i class="fas fa-bookmark"></i> Bookmark</a></li>
+      <li><a href="community.html"><i class="fas fa-users"></i> Komunitas</a></li>
+      <li><a href="voice-search.html"><i class="fas fa-microphone-alt"></i> Voice Search</a></li>
+      <li><a href="quiz.html"><i class="fas fa-gamepad"></i> Quran Quiz</a></li>
+      <li><a href="smart-recommendation.html"><i class="fas fa-lightbulb"></i> Smart Rec</a></li>
+      <li><a href="story-generator.html"><i class="fas fa-magic"></i> Story Generator</a></li>
+      <li><a href="ramadan.html"><i class="fas fa-moon"></i> Ramadan System</a></li>
+      <li><a href="progress.html"><i class="fas fa-chart-line"></i> Progress Khatam</a></li>
+      <li><a href="ai-search.html"><i class="fas fa-microchip"></i> AI Search</a></li>
+      <li><a href="share-ayat.html"><i class="fas fa-share-alt"></i> Share Ayat</a></li>
+      <li><button id="focusModeBtn"><i class="fas fa-eye"></i> Mode Fokus</button></li>
+      <li><button id="tasbihBtn"><i class="fas fa-praying-hands"></i> Tasbih Digital</button></li>
+      <li><button id="openThemeSelector"><i class="fas fa-palette"></i> Ganti Tema</button></li>
+    </ul>
+    <div class="sidebar-footer">
+      <div class="hijri-date" id="hijriDate">Memuat kalender...</div>
+      <div class="prayer-short" id="prayerShort">📍 Mendeteksi lokasi...</div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title fade-up">Baca Al-Qur’an <span>Dengan Nyaman</span></h1>
+      <p class="hero-subtitle fade-up">Pengalaman membaca yang mendalam, desain modern & elegan, dilengkapi fitur AI canggih</p>
+      <div class="hero-buttons fade-up">
+        <button class="btn-primary" id="startReadingBtn"><i class="fas fa-play"></i> Mulai Membaca</button>
+        <button class="btn-secondary" id="lastReadBtn"><i class="fas fa-history"></i> Last Read</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Last Read Card (dinamis) -->
+  <section class="last-read-section" id="lastReadSection" style="display: none;">
+    <div class="last-read-card glass glow-card">
+      <div class="last-read-icon"><i class="fas fa-book-open"></i></div>
+      <div class="last-read-content">
+        <h3>Lanjutkan Membaca</h3>
+        <p id="lastReadInfo">Surah Al-Fatihah, Ayat 1</p>
+        <button id="continueReadingBtn" class="btn-primary small">Lanjut Baca <i class="fas fa-arrow-right"></i></button>
+      </div>
+      <button class="close-lastread" id="closeLastRead"><i class="fas fa-times"></i></button>
+    </div>
+  </section>
+
+  <!-- Statistik Modern -->
+  <section class="stats">
+    <div class="stats-container">
+      <div class="stat-card glass">
+        <div class="stat-icon"><i class="fas fa-book"></i></div>
+        <div class="stat-number" id="totalSurah">114</div>
+        <div class="stat-label">Surah</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-icon"><i class="fas fa-verse"></i></div>
+        <div class="stat-number" id="totalAyat">6236</div>
+        <div class="stat-label">Ayat</div>
+      </div>
+      <div class="stat-card glass">
+        <div class="stat-icon"><i class="fas fa-layer-group"></i></div>
+        <div class="stat-number" id="totalJuz">30</div>
+        <div class="stat-label">Juz</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Jadwal Sholat Realtime -->
+  <section class="prayer-section">
+    <div class="section-header">
+      <h2><i class="fas fa-mosque"></i> Jadwal Sholat</h2>
+      <div class="location-info" id="locationInfo">
+        <i class="fas fa-map-marker-alt"></i> <span id="cityName">Mendeteksi...</span>
+      </div>
+    </div>
+    <div class="prayer-card glass">
+      <div class="prayer-times" id="prayerTimes">
+        <div class="prayer-item"><span class="prayer-name">Subuh</span><span class="prayer-time" id="subuh">--:--</span></div>
+        <div class="prayer-item"><span class="prayer-name">Dzuhur</span><span class="prayer-time" id="dzuhur">--:--</span></div>
+        <div class="prayer-item"><span class="prayer-name">Ashar</span><span class="prayer-time" id="ashar">--:--</span></div>
+        <div class="prayer-item"><span class="prayer-name">Maghrib</span><span class="prayer-time" id="maghrib">--:--</span></div>
+        <div class="prayer-item"><span class="prayer-name">Isya</span><span class="prayer-time" id="isya">--:--</span></div>
+      </div>
+      <div class="next-prayer">
+        <span>Menuju <span id="nextPrayerName"></span> :</span>
+        <span class="countdown" id="countdownTimer">--:--:--</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Smart Recommendation & Daily Ayah -->
+  <section class="recommendation-container">
+    <div class="section-header">
+      <h2><i class="fas fa-brain"></i> Rekomendasi Ayat Pintar</h2>
+      <div class="mood-buttons">
+        <button class="mood-btn" data-mood="sedih">😢 Sedih</button>
+        <button class="mood-btn" data-mood="semangat">⚡ Semangat</button>
+        <button class="mood-btn" data-mood="sabar">🧘 Sabar</button>
+        <button class="mood-btn" data-mood="rezeki">💰 Rezeki</button>
+      </div>
+    </div>
+    <div class="daily-ayat glass">
+      <h3>🌿 Ayat Hari Ini</h3>
+      <div id="dailyAyat">Memuat...</div>
+    </div>
+    <div class="recommendation-results" id="recResults"></div>
+  </section>
+
+  <!-- Progress Dashboard Mini -->
+  <section class="progress-dashboard-mini">
+    <div class="section-header">
+      <h2><i class="fas fa-chart-line"></i> Progress Khatam</h2>
+      <a href="progress.html" class="btn-secondary small">Lihat Detail</a>
+    </div>
+    <div class="stats-glass glass">
+      <div class="circular-progress-mini">
+        <svg viewBox="0 0 100 100" width="80" height="80">
+          <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="8"/>
+          <circle id="miniProgressCircle" cx="50" cy="50" r="45" fill="none" stroke="var(--emerald)" stroke-width="8" stroke-dasharray="283" stroke-dashoffset="283" stroke-linecap="round" transform="rotate(-90 50 50)"/>
+        </svg>
+        <div class="progress-percent-mini" id="miniKhatamPercent">0%</div>
+      </div>
+      <div class="stats-row-mini">
+        <div class="stat-item-mini"><span>📖 Ayat Dibaca</span><span id="miniTotalAyatRead">0</span></div>
+        <div class="stat-item-mini"><span>🔥 Streak</span><span id="miniStreakDays">0</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Daftar Surah Premium -->
+  <section class="surah-section">
+    <div class="section-header">
+      <h2>📖 Daftar Surah</h2>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">Semua</button>
+        <button class="filter-btn" data-filter="makkiyah">Makkiyah</button>
+        <button class="filter-btn" data-filter="madaniyah">Madaniyah</button>
+      </div>
+    </div>
+    <div class="surah-grid" id="surahGrid">
+      <div class="skeleton-loader"></div>
+    </div>
+  </section>
+
+  <!-- Floating Audio Player Premium -->
+  <div class="floating-player" id="floatingPlayer" style="display: none;">
+    <div class="player-card glass">
+      <div class="player-left">
+        <div class="equalizer" id="equalizer">
+          <span></span><span></span><span></span>
+        </div>
+        <div class="player-info">
+          <div class="player-surah-name" id="playerSurahName">Al-Fatihah</div>
+          <div class="player-ayat" id="playerAyatNumber">Ayat 1</div>
+        </div>
+      </div>
+      <div class="player-controls">
+        <button class="player-btn" id="repeatBtn" title="Repeat One"><i class="fas fa-redo-alt"></i></button>
+        <button class="player-btn" id="prevBtn"><i class="fas fa-backward-step"></i></button>
+        <button class="player-btn play-pause" id="playPauseBtn"><i class="fas fa-play"></i></button>
+        <button class="player-btn" id="nextBtn"><i class="fas fa-forward-step"></i></button>
+        <button class="player-btn" id="repeatSurahBtn" title="Repeat Surah"><i class="fas fa-repeat"></i></button>
+        <button class="player-btn" id="closePlayerBtn"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="player-progress-container">
+        <span class="current-time" id="currentTime">00:00</span>
+        <div class="player-progress">
+          <div class="progress-bar" id="progressBarFill"></div>
+        </div>
+        <span class="duration" id="duration">00:00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Tasbih Digital -->
+  <div class="modal" id="tasbihModal">
+    <div class="modal-content glass">
+      <div class="modal-header">
+        <h3><i class="fas fa-praying-hands"></i> Tasbih Digital</h3>
+        <button class="close-modal"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="tasbih-counter">
+        <div class="tasbih-number" id="tasbihCount">0</div>
+        <div class="tasbih-buttons">
+          <button class="tasbih-btn" id="addTasbih"><i class="fas fa-plus-circle"></i> Subhanallah</button>
+          <button class="tasbih-btn" id="resetTasbih"><i class="fas fa-undo-alt"></i> Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Theme Selector -->
+  <div class="modal" id="themeModal">
+    <div class="modal-content glass">
+      <div class="modal-header">
+        <h3><i class="fas fa-palette"></i> Pilih Tema Premium</h3>
+        <button class="close-modal theme-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="theme-grid">
+        <div class="theme-card" data-theme="emerald"><div class="theme-preview emerald"></div><span>Emerald Night</span></div>
+        <div class="theme-card" data-theme="gold"><div class="theme-preview gold"></div><span>Gold Luxury</span></div>
+        <div class="theme-card" data-theme="royal"><div class="theme-preview royal"></div><span>Royal Blue</span></div>
+        <div class="theme-card" data-theme="amoled"><div class="theme-preview amoled"></div><span>Pure AMOLED</span></div>
+        <div class="theme-card" data-theme="sunset"><div class="theme-preview sunset"></div><span>Sunset Islamic</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Quick Action Bottom Navigation (Mobile) -->
+  <div class="bottom-nav glass" id="bottomNav">
+    <button class="bottom-nav-item" data-page="home"><i class="fas fa-home"></i><span>Beranda</span></button>
+    <button class="bottom-nav-item" data-page="surah"><i class="fas fa-book"></i><span>Surah</span></button>
+    <button class="bottom-nav-item" data-page="bookmark"><i class="fas fa-bookmark"></i><span>Bookmark</span></button>
+    <button class="bottom-nav-item" data-page="profile"><i class="fas fa-user"></i><span>Profil</span></button>
+  </div>
+
+  <!-- Scripts (Semua modul) -->
+  <script src="data.js"></script>
+  <script src="tafsir-ai.js"></script>
+  <script src="focus-mode.js"></script>
+  <script src="theme.js"></script>
+  <script src="animated-bg.js"></script>
+  <script src="script.js"></script>
+  
+  <!-- Inisialisasi spesifik untuk homepage -->
+  <script>
+    (function() {
+      // Pastikan semua modul sudah di-load
+      document.addEventListener('DOMContentLoaded', async () => {
+        // Theme and background
+        if (typeof initAnimatedBackground === 'function') initAnimatedBackground();
+        if (typeof initThemeSelector === 'function') initThemeSelector();
+        if (typeof initFocusMode === 'function') initFocusMode();
+        
+        // Core functions dari script.js sudah dijalankan otomatis di dalamnya
+        // Tapi kita tambahkan load rekomendasi dan progress mini
+        await loadMiniRecommendations();
+        await loadMiniProgress();
+      });
+      
+      // Fungsi untuk rekomendasi mini di homepage
+      async function loadMiniRecommendations() {
+        const dailyDiv = document.getElementById('dailyAyat');
+        if (!dailyDiv) return;
+        // Ambil data dari smart-recommendation (gunakan allAyat dari global jika ada)
+        // Sederhana: ambil random dari data yang sudah di-cache
+        if (typeof fetchAllSurah === 'function') {
+          const surahs = await fetchAllSurah();
+          if (surahs.length) {
+            const randomSurah = surahs[Math.floor(Math.random() * surahs.length)];
+            const detail = await fetchSurahDetail(randomSurah.number);
+            const randomAyat = detail.verses[Math.floor(Math.random() * detail.verses.length)];
+            dailyDiv.innerHTML = `
+              <div class="daily-card glass">
+                <div class="arabic">${randomAyat.text.arab.substring(0, 100)}…</div>
+                <div><strong>${detail.name.transliteration.id}</strong> : ${randomAyat.number.inSurah}</div>
+                <button class="btn-primary small" onclick="location.href='surah.html?surah=${randomSurah.number}#ayat-${randomAyat.number.inSurah}'">Baca</button>
+              </div>
+            `;
+          }
+        }
+        // Mood buttons
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+          btn.onclick = () => {
+            const mood = btn.dataset.mood;
+            // Redirect ke smart-recommendation dengan query
+            window.location.href = `smart-recommendation.html?mood=${mood}`;
+          };
+        });
+      }
+      
+      async function loadMiniProgress() {
+        const progress = JSON.parse(localStorage.getItem('quran_progress')) || { totalAyat: 0, streak: 0 };
+        const totalAyatQuran = 6236;
+        const percent = (progress.totalAyat / totalAyatQuran) * 100;
+        document.getElementById('miniKhatamPercent').innerText = Math.floor(percent) + '%';
+        document.getElementById('miniTotalAyatRead').innerText = progress.totalAyat.toLocaleString();
+        document.getElementById('miniStreakDays').innerText = progress.streak;
+        const circle = document.getElementById('miniProgressCircle');
+        if (circle) {
+          const circumference = 283;
+          const offset = circumference - (percent / 100) * circumference;
+          circle.style.strokeDashoffset = offset;
+        }
+      }
+      
+      // Bottom navigation
+      const bottomItems = document.querySelectorAll('.bottom-nav-item');
+      bottomItems.forEach(item => {
+        item.onclick = () => {
+          const page = item.dataset.page;
+          if (page === 'home') window.location.href = 'index.html';
+          else if (page === 'surah') window.location.href = 'surah.html';
+          else if (page === 'bookmark') window.location.href = 'bookmark.html';
+          else if (page === 'profile') window.location.href = 'community.html';
+        };
+      });
+    })();
+  </script>
+</body>
+</html>
