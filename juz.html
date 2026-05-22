@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Juz | Al-Qur'an Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="animated-bg">
+    <div class="aurora"></div>
+    <div class="moon"></div>
+    <div class="geometric-overlay"></div>
+  </div>
+
+  <nav class="navbar glass">
+    <div class="nav-container">
+      <div class="logo"><i class="fas fa-quran"></i><span>Al-Qur'an</span></div>
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+        <button class="icon-btn" id="backHome"><i class="fas fa-home"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="juz-section">
+    <div class="section-header">
+      <h2><i class="fas fa-layer-group"></i> Daftar Juz</h2>
+      <p class="subtitle">30 Juz dalam Al-Qur'an</p>
+    </div>
+    <div class="juz-grid" id="juzGrid">
+      <div class="skeleton-loader"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.onclick = () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    };
+    document.getElementById('backHome').onclick = () => window.location.href = 'index.html';
+
+    async function loadJuzList() {
+      const grid = document.getElementById('juzGrid');
+      grid.innerHTML = '<div class="skeleton-loader"></div>';
+      const juzNumbers = Array.from({ length: 30 }, (_, i) => i + 1);
+      let juzData = [];
+      for (let j of juzNumbers) {
+        try {
+          const data = await fetchJuzDetail(j);
+          juzData.push({ juz: j, start: data.surat_start.nomor, end: data.surat_end.nomor });
+        } catch(e) { juzData.push({ juz: j, start: '?', end: '?' }); }
+      }
+      grid.innerHTML = juzData.map(j => `
+        <div class="surah-card glass fade-up" data-juz="${j.juz}">
+          <div class="surah-number">Juz ${j.juz}</div>
+          <div class="surah-name-ar">الجزء ${j.juz}</div>
+          <div class="surah-footer">Surah ${j.start} - ${j.end}</div>
+        </div>
+      `).join('');
+      document.querySelectorAll('.surah-card[data-juz]').forEach(card => {
+        card.onclick = () => {
+          const juzNum = card.dataset.juz;
+          window.location.href = `surah.html?juz=${juzNum}`;
+        };
+      });
+    }
+    loadJuzList();
+  </script>
+</body>
+</html>
