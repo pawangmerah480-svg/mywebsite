@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Quran Quiz | Al-Qur'an Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="animated-bg">
+    <div class="aurora"></div>
+    <div class="moon"></div>
+    <div class="geometric-overlay"></div>
+  </div>
+
+  <nav class="navbar glass">
+    <div class="nav-container">
+      <div class="logo"><i class="fas fa-quran"></i><span>Al-Qur'an</span></div>
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+        <button class="icon-btn" id="backHome"><i class="fas fa-home"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="quiz-container">
+    <div class="quiz-header glass">
+      <h2><i class="fas fa-gamepad"></i> Quran Quiz</h2>
+      <div class="quiz-stats">Score: <span id="quizScore">0</span> | Streak: <span id="quizStreak">0</span> | XP: <span id="quizXP">0</span></div>
+    </div>
+    <div class="quiz-card glass" id="quizCard">
+      <div class="quiz-question" id="quizQuestion">Loading...</div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div class="quiz-timer" id="quizTimer">⏱️ 10</div>
+    </div>
+    <div class="quiz-leaderboard glass">
+      <h3>🏆 Leaderboard</h3>
+      <ul id="quizLeaderboard"><li>1. Anda - 0 poin</li></ul>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Theme & back
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.onclick = () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    };
+    document.getElementById('backHome').onclick = () => window.location.href = 'index.html';
+
+    // Quiz data
+    let score = 0, streak = 0, xp = 0;
+    let currentQuestion = null;
+    let quizData = [
+      { question: "Surah Al-Fatihah terdiri dari berapa ayat?", options: ["5", "6", "7", "8"], answer: 2, type: "general" },
+      { question: "Arti dari 'Al-Ikhlas' adalah?", options: ["Pengampunan", "Ikhlas", "Keadilan", "Kekuasaan"], answer: 1, type: "meaning" },
+      { question: "Sambung ayat: 'Iyyaka na'budu wa iyyaka ...'", options: ["nasta'in", "tawakkal", "rahman", "rahim"], answer: 0, type: "connect" },
+      { question: "Surah yang sering disebut 'Jantung Al-Qur'an' adalah?", options: ["Yasin", "Ar-Rahman", "Al-Mulk", "Al-Waqiah"], answer: 0, type: "general" },
+      { question: "Berapa jumlah surah dalam Al-Qur'an?", options: ["114", "110", "120", "100"], answer: 0, type: "general" }
+    ];
+    let currentIndex = 0;
+    let timerInterval = null;
+
+    function loadQuestion() {
+      if (timerInterval) clearInterval(timerInterval);
+      currentQuestion = quizData[currentIndex % quizData.length];
+      document.getElementById("quizQuestion").innerHTML = currentQuestion.question;
+      const optsDiv = document.getElementById("quizOptions");
+      optsDiv.innerHTML = currentQuestion.options.map((opt, idx) => `<button class="quiz-option" data-opt="${idx}">${opt}</button>`).join("");
+      document.querySelectorAll(".quiz-option").forEach(btn => {
+        btn.onclick = () => checkAnswer(parseInt(btn.dataset.opt));
+      });
+      startTimer();
+    }
+
+    function startTimer() {
+      let time = 10;
+      const timerEl = document.getElementById("quizTimer");
+      timerInterval = setInterval(() => {
+        time--;
+        timerEl.innerText = `⏱️ ${time}`;
+        if (time <= 0) {
+          clearInterval(timerInterval);
+          checkAnswer(-1);
+        }
+      }, 1000);
+    }
+
+    function checkAnswer(selected) {
+      clearInterval(timerInterval);
+      if (selected === currentQuestion.answer) {
+        score += 10;
+        streak++;
+        xp += 5;
+        showEffect("✅ Benar! +10 XP");
+        playSound('correct');
+      } else {
+        streak = 0;
+        showEffect("❌ Salah! Jawaban: " + currentQuestion.options[currentQuestion.answer]);
+        playSound('wrong');
+      }
+      document.getElementById("quizScore").innerText = score;
+      document.getElementById("quizStreak").innerText = streak;
+      document.getElementById("quizXP").innerText = xp;
+      currentIndex++;
+      loadQuestion();
+      updateLeaderboard();
+    }
+
+    function showEffect(msg) {
+      const notif = document.createElement("div");
+      notif.className = "quiz-notif";
+      notif.innerText = msg;
+      document.body.appendChild(notif);
+      setTimeout(() => notif.remove(), 1500);
+    }
+
+    function playSound(type) {
+      // Simulasi suara (optional)
+      const audio = new Audio();
+      audio.src = type === 'correct' ? 'https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3' : 'https://www.soundjay.com/misc/sounds/failure-drum-01.mp3';
+      audio.play().catch(e => console.log('Audio tidak dapat diputar'));
+    }
+
+    function updateLeaderboard() {
+      let leaderboard = JSON.parse(localStorage.getItem("quiz_leaderboard")) || [];
+      leaderboard.push({ name: "Anda", score: score, xp: xp, date: new Date() });
+      leaderboard.sort((a,b) => b.score - a.score);
+      leaderboard = leaderboard.slice(0,5);
+      localStorage.setItem("quiz_leaderboard", JSON.stringify(leaderboard));
+      const list = document.getElementById("quizLeaderboard");
+      list.innerHTML = leaderboard.map((l,i) => `<li>${i+1}. ${l.name} - ${l.score} poin (${l.xp} XP)</li>`).join("");
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
