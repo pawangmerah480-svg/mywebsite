@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Voice Search | Al-Qur'an Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="animated-bg">
+    <div class="aurora"></div>
+    <div class="moon"></div>
+    <div class="geometric-overlay"></div>
+  </div>
+
+  <nav class="navbar glass">
+    <div class="nav-container">
+      <div class="logo"><i class="fas fa-quran"></i><span>Al-Qur'an</span></div>
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+        <button class="icon-btn" id="backHome"><i class="fas fa-home"></i></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="voice-search-container">
+    <div class="voice-card glass">
+      <h2><i class="fas fa-microphone-alt"></i> Cari dengan Suara</h2>
+      <div class="voice-visualizer" id="voiceVisualizer">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <button id="voiceBtn" class="voice-btn"><i class="fas fa-microphone"></i> Klik & Bicara</button>
+      <p class="voice-status" id="voiceStatus">Siap mendengar</p>
+      <div class="voice-result" id="voiceResult"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.onclick = () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    };
+    document.getElementById('backHome').onclick = () => window.location.href = 'index.html';
+
+    const voiceBtn = document.getElementById("voiceBtn");
+    const statusEl = document.getElementById("voiceStatus");
+    const resultEl = document.getElementById("voiceResult");
+    const visualizer = document.getElementById("voiceVisualizer");
+    let recognition;
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'id-ID';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        statusEl.innerText = "🎙️ Mendengarkan...";
+        voiceBtn.classList.add("listening");
+        visualizer.classList.add("active");
+      };
+      recognition.onend = () => {
+        statusEl.innerText = "Selesai, mencari...";
+        voiceBtn.classList.remove("listening");
+        visualizer.classList.remove("active");
+      };
+      recognition.onresult = async (event) => {
+        const text = event.results[0][0].transcript.toLowerCase();
+        statusEl.innerText = `Anda mengatakan: "${text}"`;
+        resultEl.innerHTML = "<div class='skeleton-loader'></div>";
+        
+        // Cari surah atau ayat berdasarkan teks
+        let results = [];
+        if (text.includes("surah")) {
+          const surahName = text.replace("surah", "").trim();
+          const surahs = await fetchAllSurah();
+          const found = surahs.find(s => s.name.transliteration.id.toLowerCase().includes(surahName));
+          if (found) window.location.href = `surah.html?surah=${found.number}`;
+          else resultEl.innerHTML = "<p>Surah tidak ditemukan</p>";
+        } else {
+          // Cari ayat berdasarkan kata kunci
+          const allSurahs = await fetchAllSurah();
+          let matched = [];
+          for (let s of allSurahs.slice(0, 10)) {
+            const detail = await fetchSurahDetail(s.number);
+            const foundAyat = detail.verses.filter(v => v.translation.id.toLowerCase().includes(text));
+            matched.push(...foundAyat.slice(0, 2));
+            if (matched.length >= 5) break;
+          }
+          if (matched.length === 0) resultEl.innerHTML = "<p>Tidak ditemukan ayat yang cocok</p>";
+          else {
+            resultEl.innerHTML = matched.map(v => `
+              <div class="voice-result-item glass">
+                <div class="arabic small">${v.text.arab.substring(0, 60)}...</div>
+                <div class="translation">${v.translation.id.substring(0, 80)}</div>
+                <button class="btn-primary small read-voice" data-surah="${v.surah?.number || 1}" data-ayat="${v.number.inSurah}">Baca Ayat</button>
+              </div>
+            `).join("");
+            document.querySelectorAll(".read-voice").forEach(btn => {
+              btn.onclick = () => window.location.href = `surah.html?surah=${btn.dataset.surah}#ayat-${btn.dataset.ayat}`;
+            });
+          }
+        }
+      };
+      voiceBtn.onclick = () => recognition.start();
+    } else {
+      statusEl.innerText = "Browser Anda tidak mendukung voice recognition";
+      voiceBtn.disabled = true;
+    }
+  </script>
+</body>
+</html>
